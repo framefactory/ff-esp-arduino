@@ -7,7 +7,7 @@
 #ifndef _ESP_BITMATRIX_FONTS_H
 #define _ESP_BITMATRIX_FONTS_H
 
-#include "matrix/Bitmap.h"
+#include "effect/Bitmap.h"
 
 F_BEGIN_NAMESPACE
 

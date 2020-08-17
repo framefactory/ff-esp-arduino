@@ -8,7 +8,7 @@
 #define _ESP_MATRIX_CANVAS_H
 
 #include "library.h"
-#include "Bitmap.h"
+#include "effect/Bitmap.h"
 
 #include <vector>
 #include <string>
@@ -22,18 +22,18 @@ class Canvas : public Bitmap
 public:
     struct mapping_t {
         MAX7219Matrix* pMatrix;
-        uint32_t x;
-        uint32_t y;
+        int x;
+        int y;
     };
 
     typedef std::vector<MAX7219Matrix*> matrixVec_t;
     typedef std::vector<mapping_t> mappingVec_t;
 
-    Canvas(uint32_t width, uint32_t height);
+    Canvas(int width, int height);
     virtual ~Canvas() {}
 
-    void addMatrix(MAX7219Matrix* pMatrix, uint32_t x, uint32_t y);
-    void addMatrices(const matrixVec_t& matrices, uint32_t xPos, uint32_t yPos, uint32_t xOffset, uint32_t yOffset);
+    void addMatrix(MAX7219Matrix* pMatrix, int x, int y);
+    void addMatrices(const matrixVec_t& matrices, int xPos, int yPos, int xOffset, int yOffset);
 
     void update(int xOffset = 0, int yOffset = 0);
 

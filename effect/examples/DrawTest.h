@@ -25,6 +25,7 @@ public:
 
 private:
     Canvas* _pCanvas;
+    int _oldX;
 };
 
 F_END_NAMESPACE

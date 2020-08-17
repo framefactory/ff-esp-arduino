@@ -9,19 +9,19 @@
 
 F_USE_NAMESPACE
 
-Canvas::Canvas(uint32_t width, uint32_t height) :
+Canvas::Canvas(int width, int height) :
     Bitmap(width, height)
 {
 }
 
-void Canvas::addMatrix(MAX7219Matrix* pMatrix, uint32_t x, uint32_t y)
+void Canvas::addMatrix(MAX7219Matrix* pMatrix, int x, int y)
 {
    _mappings.push_back({ pMatrix, x, y });
 }
 
-void Canvas::addMatrices(const matrixVec_t& matrices, uint32_t xPos, uint32_t yPos, uint32_t xOffset, uint32_t yOffset)
+void Canvas::addMatrices(const matrixVec_t& matrices, int xPos, int yPos, int xOffset, int yOffset)
 {
-    for (size_t i = 0; i < matrices.size(); ++i) {
+    for (int i = 0; i < matrices.size(); ++i) {
        _mappings.push_back({ matrices[i], xPos + xOffset * i, yPos + yOffset * i });
     }
 }

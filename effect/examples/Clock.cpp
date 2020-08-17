@@ -6,15 +6,15 @@
 
 #include "Clock.h"
 
+#include "../Bitmap.h"
 #include "matrix/Canvas.h"
-#include "matrix/Bitmap.h"
 #include "fonts/Fonts.h"
 
 #include <time.h>
 
 F_USE_NAMESPACE
 
-const String Clock::name = "clock";
+const String Clock::name = "Clock";
 
 Clock::Clock(Canvas* pCanvas) :
     _pCanvas(pCanvas),
@@ -47,9 +47,9 @@ bool Clock::onRender(const Timing& timing)
     _pCanvas->set(32, 2);
     _pCanvas->set(32, 5);
 
-    _pCanvas->drawText(hrs, &Fonts::fontC64, -1, 0, 7, false);
-    _pCanvas->drawText(mins, &Fonts::fontC64, 16, 0, 7, false);
-    _pCanvas->drawText(secs, &Fonts::fontC64, 34, 0, 7, false);
+    _pCanvas->drawText(hrs, &Fonts::fontC64, -1, 0, 7);
+    _pCanvas->drawText(mins, &Fonts::fontC64, 16, 0, 7);
+    _pCanvas->drawText(secs, &Fonts::fontC64, 34, 0, 7);
 
     // char text[128];
     // snprintf(text, 128, "%f", timing.delta);

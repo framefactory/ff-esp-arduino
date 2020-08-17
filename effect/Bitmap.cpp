@@ -5,13 +5,15 @@
  */
 
 #include "Bitmap.h"
+#include "core/math.h"
 
 F_USE_NAMESPACE
 
 Bitmap::Bitmap(int width, int height, const uint8_t *pData /* = nullptr */) :
     _width(width),
     _height(height),
-    _size(width * height / 8)
+    _size(width * height / 8),
+    _clip(0, 0, width, height)
 {
     _pData = new uint8_t[_size];
 
@@ -30,7 +32,7 @@ Bitmap::~Bitmap()
     F_SAFE_DELETE(_pData);
 }
 
-void Bitmap::line(int x0, int y0, int x1, int y1, bool state)
+void Bitmap::line(int x0, int y0, int x1, int y1, DrawOp op)
 {
     // source: https://github.com/ArashPartow/bitmap
     // alternative: https://github.com/wernsey/bitmap/blob/master/bmp.c
@@ -52,10 +54,10 @@ void Bitmap::line(int x0, int y0, int x1, int y1, bool state)
 
     for (int i = 0; i < dx; ++i) {
         if (steep) {
-            set(y0, x0, state, false);
+            set(y0, x0, op);
         }
         else {
-            set(x0, y0, state, false);
+            set(x0, y0, op);
         }
         while (e >= 0) {
             y0 += sy;
@@ -66,39 +68,39 @@ void Bitmap::line(int x0, int y0, int x1, int y1, bool state)
         e += (dy << 1);
     }
 
-    set(x1, y1, state, false);
+    set(x1, y1, op);
 }
 
-void Bitmap::rect(int x, int y, int width, int height, bool state)
+void Bitmap::rect(int x, int y, int width, int height, DrawOp op)
 {
     int x1 = x + width;
     int y1 = y + height;
-    line(x, y, x1 - 1, y, state);
-    line(x1, y, x1, y1 - 1);
-    line(x + 1, y1, x1, y1, state);
-    line(x, y + 1, x, y1);
+    line(x, y, x1 - 1, y, op);
+    line(x1, y, x1, y1 - 1, op);
+    line(x + 1, y1, x1, y1, op);
+    line(x, y + 1, x, y1, op);
 }
 
-void Bitmap::fill(int x, int y, int width, int height, bool state)
+void Bitmap::fill(int x, int y, int width, int height, DrawOp op)
 {
     for (int iy = y; iy < y + height; ++iy) {
         for (int ix = x; ix < x + width; ++ix) {
-            set(ix, iy, state, false);
+            set(ix, iy, op);
         }
     }
 }
 
-void Bitmap::circle(int cx, int cy, int r, bool state)
+void Bitmap::circle(int cx, int cy, int r, DrawOp op)
 {
     int x = 0;
     int d = (1 - r) << 1;
 
     while (r >= 0)
     {
-        set(cx + x, cy + r, state, false);
-        set(cx + x, cy - r, state, false);
-        set(cx - x, cy + r, state, false);
-        set(cx - x, cy - r, state, false);
+        set(cx + x, cy + r, op);
+        set(cx + x, cy - r, op);
+        set(cx - x, cy + r, op);
+        set(cx - x, cy - r, op);
 
         if ((d + r) > 0) {
            d -= ((--r) << 1) - 1;
@@ -109,7 +111,7 @@ void Bitmap::circle(int cx, int cy, int r, bool state)
     }
 }
 
-void Bitmap::ellipse(int cx, int cy, int rx, int ry, bool state)
+void Bitmap::ellipse(int cx, int cy, int rx, int ry, DrawOp op)
 {
     int t1 = rx * rx;
     int t2 = t1 << 1;
@@ -132,10 +134,10 @@ void Bitmap::ellipse(int cx, int cy, int rx, int ry, bool state)
     int positive_ty = cy + y;
 
     while (d2 < 0) {
-        set(positive_tx, positive_ty, state, false);
-        set(positive_tx, negative_ty, state, false);
-        set(negative_tx, positive_ty, state, false);
-        set(negative_tx, negative_ty, state, false);
+        set(positive_tx, positive_ty, op);
+        set(positive_tx, negative_ty, op);
+        set(negative_tx, positive_ty, op);
+        set(negative_tx, negative_ty, op);
 
         ++y;
 
@@ -159,10 +161,10 @@ void Bitmap::ellipse(int cx, int cy, int rx, int ry, bool state)
     }
 
     do {
-        set(positive_tx, positive_ty, state, false);
-        set(positive_tx, negative_ty, state, false);
-        set(negative_tx, positive_ty, state, false);
-        set(negative_tx, negative_ty, state, false);
+        set(positive_tx, positive_ty, op);
+        set(positive_tx, negative_ty, op);
+        set(negative_tx, positive_ty, op);
+        set(negative_tx, negative_ty, op);
 
         x--;
         t8 = t8 - t6;
@@ -183,33 +185,59 @@ void Bitmap::ellipse(int cx, int cy, int rx, int ry, bool state)
     } while (x >= 0);
 }
 
-void Bitmap::drawText(const char *pText, const Bitmap *pFont, int x, int y, int stride, bool wrap /* = true */)
+void Bitmap::drawText(const char *pText, const Bitmap *pFont, int x, int y, int stride, MixOp op)
 {
     for (int ic = 0; pText[ic] != 0; ++ic) {
         int dx = x + ic * stride;
 
-        if (wrap || (dx >= -8 && dx < width() && y >= -8 && y < height())) {
+        if (dx >= -8 && dx < width() && y >= -8 && y < height()) {
             uint8_t c = pText[ic];
             int cx = (c % 16) * 8;
             int cy = (c / 16) * 8;
 
             for (int iy = 0; iy < 8; ++iy) {
                 for (int ix = 0; ix < 8; ++ix) {
-                    if (pFont->get(cx + ix, cy + iy)) {
-                        set(dx + ix, y + iy, true, wrap);
-                    }
+                    mix(dx + ix, y + iy, pFont->get(cx + ix, cy + iy), op);
                 }
             }
         }
     }
 }
 
-void Bitmap::copy(const Bitmap &source, int sx, int sy, int tx, int ty, int w, int h)
+void Bitmap::copy(const Bitmap &source, int sx, int sy, int tx, int ty, int w, int h, MixOp op)
 {
     for (int y = 0; y < h; ++y) {
         for (int x = 0; x < w; ++x) {
-            set(tx + x, ty + y, source.get(sx + x, sy + y));
+            mix(tx + x, ty + y, source.get(sx + x, sy + y), op);
         }
+    }
+}
+
+void Bitmap::blit(const Bitmap& source, MixOp op)
+{
+    int size = std::min(_size, source._size);
+
+    switch(op) {
+        case Replace:
+            for (int i = 0; i < size; ++i) {
+                _pData[i] = source._pData[i];
+            }
+            break;
+        case And:
+            for (int i = 0; i < size; ++i) {
+                _pData[i] &= source._pData[i];
+            }
+            break;
+        case Or:
+            for (int i = 0; i < size; ++i) {
+                _pData[i] |= source._pData[i];
+            }
+            break;
+        case Xor:
+            for (int i = 0; i < size; ++i) {
+                _pData[i] ^= source._pData[i];
+            }
+            break;
     }
 }
 
@@ -220,50 +248,51 @@ void Bitmap::clear()
     }
 }
 
-void Bitmap::scrollLeft(bool wrap /* = false */)
+void Bitmap::scrollLeft(MixOp op)
 {
-    int x0 = wrap ? _width : _width + 1;
-    int x1 = _width * 2;
-
     for (int y = 0; y < _height; ++y) {
-        for (int x = x0; x < x1; ++x) {
-            set(x - 1, y, get(x, y));
+        for (int x = 1; x < _width; ++x) {
+            mix(x - 1, y, get(x, y), op);
         }
     }
 }
 
-void Bitmap::scrollRight(bool wrap /* = false */)
+void Bitmap::scrollRight(MixOp op)
 {
-    int x0 = _width;
-    int x1 = wrap ? _width * 2 - 1 : _width * 2 - 2;
-
     for (int y = 0; y < _height; ++y) {
-        for (int x = x1; x >= x0; --x) {
-            set(x + 1, y, get(x, y));
+        for (int x = _width - 1; x > 0; --x) {
+            mix(x, y, get(x - 1, y), op);
         }
     }
 }
 
-void Bitmap::scrollUp(bool wrap /* = false */)
+void Bitmap::scrollUp(MixOp op)
 {
-    int y0 = wrap ? _height : _height + 1;
-    int y1 = _height * 2;
-
-    for (int y = y0; y < y1; ++y) {
+    for (int y = 0; y < _height; ++y) {
         for (int x = 0; x < _width; ++x) {
-            set(x, y - 1, get(x, y));
+            mix(x, y - 1, get(x, y), op);
         }
     }
 }
 
-void Bitmap::scrollDown(bool wrap /* = false */)
+void Bitmap::scrollDown(MixOp op)
 {
-    int y0 = _height;
-    int y1 = wrap ? _height * 2 - 1 : _height * 2 - 2;
-
-    for (int y = y1; y >= y0; --y) {
+    for (int y = _height - 1; y > 0; --y) {
         for (int x = 0; x < _width; ++x) {
-            set(x, y + 1, get(x, y));
+            mix(x, y, get(x, y - 1), op);
         }
     }
+}
+
+void Bitmap::setClipRegion(int left, int top, int width, int height)
+{
+    _clip.x0 = ff::limit(left, 0, _width);
+    _clip.y0 = ff::limit(top, 0, _height);
+    _clip.x1 = ff::limit(left + width, 0, _width);
+    _clip.y1 = ff::limit(top + height, 0, _height); 
+}
+
+void Bitmap::clearClipRegion()
+{
+    _clip = { 0, 0, _width, _height };
 }
