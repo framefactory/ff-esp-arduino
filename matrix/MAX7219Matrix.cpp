@@ -11,7 +11,7 @@ F_USE_NAMESPACE
 MAX7219Matrix::MAX7219Matrix() :
     SerialDevice(16),
     _rows { 0, 0, 0, 0, 0, 0, 0, 0 },
-    _brightness(0x04)
+    _brightness(0x02)
 {
 }
 

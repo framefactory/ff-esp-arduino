@@ -9,42 +9,39 @@
 
 #include "library.h"
 #include "Bitmap.h"
+#include "Layer.h"
 
-#include <map>
-#include <list>
+#include <vector>
 
 F_BEGIN_NAMESPACE
 
 class Effect;
 class Timing;
 
-class Composition
+class Composition : public Bitmap
 {
 public:
+    typedef std::vector<Layer*> layerVec_t;
+
     Composition(int width, int height);
     virtual ~Composition();
 
     void fetchRealTime(float timezoneOffset, float dstOffset);
     bool render();
 
-    void startEffect(const String& name);
-    void stopEffect(const String& name);
+    size_t addLayer(Layer* pLayer);
+    Layer* addEffectLayer(Effect* pEffect, MixOp op = Or);
+    void insertLayerAt(Layer* pLayer, size_t index);
+    void removeLayerAt(size_t index);
 
-    void addEffect(Effect* pEffect, const String& name = "");
-    void removeEffect(const String& name);
+    Layer* layer(int index) const { return _layers[index]; }
+    size_t numLayers() const { return _layers.size(); }
 
     const Timing* timing() const { return _pTiming; }
-    int width() const { return _width; }
-    int height() const { return _height; }
 
 private:
-    typedef std::map<String, Effect*> effectMap_t;
-    typedef std::list<Effect*> effectQueue_t;
-    effectMap_t _effects;
-    effectQueue_t _effectQueue;
+    layerVec_t _layers;
     Timing* _pTiming;
-    int _width;
-    int _height;
 };
 
 F_END_NAMESPACE

@@ -9,25 +9,53 @@
 
 F_USE_NAMESPACE
 
-Layer::Layer(Composition* pComposition, Effect* pEffect, MixOp op) :
+Layer::Layer(Composition* pComposition, MixOp op) :
     Bitmap(pComposition->width(), pComposition->height()),
-    _pComposition(pComposition),
-    _pEffect(pEffect),
+    _isEnabled(true),
+    _pEffect(nullptr),
     _mixOp(op)
 {
 }
 
-void Layer::start(Timing& timing)
+Layer::Layer(int width, int height, MixOp op) :
+    Bitmap(width, height),
+    _pEffect(nullptr),
+    _mixOp(op)
 {
-    _pEffect->start(timing);
 }
 
-void Layer::stop(Timing& timing)
+Layer::~Layer()
 {
-    _pEffect->stop(timing);
+    F_SAFE_DELETE(_pEffect);
+}
+
+void Layer::setEnabled(bool enabled)
+{
+    _isEnabled = enabled;
 }
 
 bool Layer::render(Timing& timing)
 {
-    return _pEffect->render(timing);
+    if (!_isEnabled) {
+        return false;
+    }
+
+    return _pEffect->render(timing, this);
 }
+
+void Layer::compose(Bitmap* pTarget) 
+{
+    pTarget->blit(*this, _mixOp);
+}
+
+void Layer::setEffect(Effect* pEffect) 
+{
+    F_SAFE_DELETE(_pEffect);
+    _pEffect = pEffect;
+}
+
+void Layer::setMixOperation(MixOp op) 
+{
+    _mixOp = op;
+}
+

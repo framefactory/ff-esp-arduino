@@ -22,11 +22,11 @@ void Effect::stop(Timing& timing)
     _isRunning = false;
 }
 
-bool Effect::render(Timing& timing)
+bool Effect::render(Timing& timing, Bitmap* pBitmap)
 {
     timing.effectFrames = timing.frames - _offsetFrames;
     timing.effectSeconds = timing.seconds - _offsetSeconds;
-    return onRender(timing);
+    return onRender(timing, pBitmap);
 }
 
 void Effect::onStart(const Timing& timing)

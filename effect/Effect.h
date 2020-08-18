@@ -9,6 +9,7 @@
 
 #include "library.h"
 #include "Timing.h"
+#include "Bitmap.h"
 
 F_BEGIN_NAMESPACE
 
@@ -19,15 +20,13 @@ public:
 
     void start(Timing& timing);
     void stop(Timing& timing);
-    bool render(Timing& timing);
+    bool render(Timing& timing, Bitmap* pBitmap);
 
     bool isRunning() const { return _isRunning; }
 
     virtual void onStart(const Timing& timing);
     virtual void onStop(const Timing& timing);
-    virtual bool onRender(const Timing& timing) = 0;
-
-    virtual const String& effectName() const = 0;
+    virtual bool onRender(const Timing& timing, Bitmap* pBitmap) = 0;
 
 private:
     bool _isRunning;

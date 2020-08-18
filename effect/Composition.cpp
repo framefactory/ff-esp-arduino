@@ -5,7 +5,6 @@
  */
 
 #include "Composition.h"
-#include "Effect.h"
 #include "Timing.h"
 
 #include <time.h>
@@ -13,16 +12,15 @@
 F_USE_NAMESPACE
 
 Composition::Composition(int width, int height) :
-    _pTiming(new Timing()),
-    _width(width),
-    _height(height)
+    Bitmap(width, height),
+    _pTiming(new Timing())
 {
 }
 
 Composition::~Composition()
 {
-    for (auto it : _effects) {
-        delete it.second;
+    for (auto pLayer : _layers) {
+        delete pLayer;
     }
 }
 
@@ -39,41 +37,42 @@ bool Composition::render()
     _pTiming->update();
     bool changed = false;
 
-    for (auto it : _effectQueue) {
-        changed = it->render(*_pTiming) || changed;
-        if (!it->isRunning()) {
-            auto it0 = it++;
-            _effectQueue.remove(it0);
+    for (auto pLayer : _layers) {
+        changed = pLayer->render(*_pTiming) || changed;
+    }
+
+    if (changed) {
+        clear();
+        for (auto pLayer : _layers) {
+            pLayer->compose(this);
         }
     }
 
-    return changed;
+    return changed;    
 }
 
-void Composition::startEffect(const String& name)
+size_t Composition::addLayer(Layer* pLayer) 
 {
-    auto pEffect = _effects.at(name);
-    if (pEffect) {
-        pEffect->start(*_pTiming);
-        _effectQueue.push_front(pEffect);
-    }
+    _layers.push_back(pLayer);
+    return _layers.size() - 1;
 }
 
-void Composition::stopEffect(const String& name)
+Layer* Composition::addEffectLayer(Effect* pEffect, MixOp op) 
 {
-    auto pEffect = _effects.at(name);
-    if (pEffect) {
-        pEffect->stop(*_pTiming);
-    }
+    Layer* pLayer = new Layer(this, op);
+    pLayer->setEffect(pEffect);
+    addLayer(pLayer);
+    pEffect->start(*_pTiming);
+    return pLayer;
 }
 
-void Composition::addEffect(Effect* pEffect, const String& name)
+void Composition::insertLayerAt(Layer* pLayer, size_t index) 
 {
-    const String& effectName = name.isEmpty() ? pEffect->effectName() : name;
-    _effects.emplace(effectName, pEffect);
+    _layers.insert(_layers.begin() + index, pLayer);
 }
 
-void Composition::removeEffect(const String& name)
+void Composition::removeLayerAt(size_t index) 
 {
-    _effects.erase(name);
+    auto it = _layers.erase(_layers.begin() + index);
+    delete *it;    
 }

@@ -8,26 +8,19 @@
 
 F_USE_NAMESPACE
 
-const String DrawTest::name = "DrawTest";
-
-DrawTest::DrawTest(Canvas* pCanvas) :
-    _pCanvas(pCanvas),
-    _oldX(0)
+bool DrawTest::onRender(const Timing& timing, Bitmap* pBitmap)
 {
-}
+    int width = pBitmap->width();
+    int height = pBitmap->height();
 
-bool DrawTest::onRender(const Timing& timing)
-{
-    int width = _pCanvas->width();
-    int height = _pCanvas->height();
-
-    int x = (sin(timing.effectSeconds * 0.5) * 0.5 + 0.5) * width;
+    int x = (sin(timing.effectSeconds * 2.0) * 0.5 + 0.5) * width;
     if (x == _oldX) {
         return false;
     }
 
     _oldX = x;
-    _pCanvas->line(x, 0, width - 1 - x, height - 1);
+    pBitmap->clear();
+    pBitmap->line(x, 0, width - 1 - x, height - 1);
     return true;
 
 

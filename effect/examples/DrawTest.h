@@ -17,15 +17,10 @@ F_BEGIN_NAMESPACE
 class DrawTest : public Effect
 {
 public:
-    static const String name;
-
-    DrawTest(Canvas* pCanvas);
-    virtual bool onRender(const Timing& timing);
-    const String& effectName() const { return DrawTest::name; }
+    virtual bool onRender(const Timing& timing, Bitmap* pBitmap);
 
 private:
-    Canvas* _pCanvas;
-    int _oldX;
+    int _oldX = 0;
 };
 
 F_END_NAMESPACE

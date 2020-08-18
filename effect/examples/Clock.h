@@ -12,22 +12,19 @@
 
 F_BEGIN_NAMESPACE
 
-class Canvas;
-
 class Clock : public Effect
 {
 public:
-    static const String name;
-
-    explicit Clock(Canvas* pCanvas);
-    bool onRender(const Timing& timing) override;
-    const String& effectName() const { return Clock::name; }
+    virtual bool onRender(const Timing& timing, Bitmap* pBitmap);
     
 private:
     void _format(int value, char* pString, int length, char pad = '0');
 
-    Canvas* _pCanvas;
-    int _lastSecond;
+    double _t[6] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    int _dc[6] { 0, 0, 0, 0, 0, 0 };
+    int _dp[6] { 0, 0, 0, 0, 0, 0 };
+    int _yp[6] { 0, 0, 0, 0, 0, 0 };
+    int _x[6] { 41, 34, 23, 16, 6, -1 };
 };
 
 F_END_NAMESPACE

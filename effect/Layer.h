@@ -18,15 +18,24 @@ class Composition;
 class Layer : public Bitmap
 {
 public:
-    Layer(Composition* pComposition, Effect* pEffect, MixOp op = Or);
-    virtual ~Layer() {}
+    Layer(Composition* pComposition, MixOp op = Or);
+    Layer(int width, int height, MixOp = Or);
+    virtual ~Layer();
 
-    void start(Timing& timing);
-    void stop(Timing& timing);
+    void setEnabled(bool enabled);
+    bool enabled() const { return _isEnabled; }
+
     bool render(Timing& timing);
+    void compose(Bitmap* pTarget);
+
+    void setEffect(Effect* pEffect);
+    Effect* effect() { return _pEffect; }
+
+    void setMixOperation(MixOp op);
+    MixOp mixOperation() const { return _mixOp; }
 
 private:
-    Composition* _pComposition;
+    bool _isEnabled;
     Effect* _pEffect;
     MixOp _mixOp;
 };
