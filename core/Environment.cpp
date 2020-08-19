@@ -5,7 +5,12 @@
  */
 
 #include "Environment.h"
+
+#ifdef ARDUINO_ESP8266_RELEASE
+#include <FS.h>
+#else
 #include <SPIFFS.h>
+#endif
 
 F_USE_NAMESPACE
 
@@ -14,12 +19,18 @@ Environment::Environment(const String& filePath) :
 {
 }
 
-void Environment::read()
+bool Environment::read()
 {
+    SPIFFS.begin();
+    #ifdef ARDUINO_ESP8266_RELEASE
+    File file = SPIFFS.open(_filePath, "r");
+    #else
     File file = SPIFFS.open(_filePath, FILE_READ);
+    #endif
+    
     if (!file) {
         Serial.printf("Failed to open environment file at '%s'", _filePath.c_str());
-        return;
+        return false;
     }
 
     _variables.clear();
@@ -38,6 +49,8 @@ void Environment::read()
             _variables.emplace(key, value);    
         }
     }
+
+    return true;
 }
 
 const String& Environment::get(const String& key, const String& preset) const

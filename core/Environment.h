@@ -18,7 +18,7 @@ public:
     Environment(const String& filePath = "/.env");
     virtual ~Environment() {}
 
-    void read();
+    bool read();
     
     const String& get(const String& key, const String& preset = String()) const;
     const char* getCStr(const String& key, const char* pPreset = nullptr) const;

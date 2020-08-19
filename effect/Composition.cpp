@@ -26,10 +26,18 @@ Composition::~Composition()
 
 void Composition::fetchRealTime(float timezoneOffset, float dstOffset)
 {
+    // start async request to time servers
+    Serial.print("Fetching time");
     configTime(timezoneOffset * 3600, dstOffset * 3600, "pool.ntp.org", "time.nist.gov");
-    while (!time(nullptr)) {
-        delay(100);
+
+    // wait until time is adjusted (more than a day away from epoch)
+    while (time(nullptr) < 24 * 3600) {
+        Serial.print(".");
+        delay(500);
     }
+
+    Serial.println();
+
 }
 
 bool Composition::render()
