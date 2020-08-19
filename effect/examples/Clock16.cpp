@@ -4,7 +4,7 @@
  * License: MIT
  */
 
-#include "Clock.h"
+#include "Clock16.h"
 
 #include "../Bitmap.h"
 #include "matrix/Canvas.h"
@@ -15,7 +15,7 @@
 
 F_USE_NAMESPACE
 
-bool Clock::onRender(const Timing& timing, Bitmap* pBitmap)
+bool Clock16::onRender(const Timing& timing, Bitmap* pBitmap)
 {
     if (!isRunning()) {
         return false;
@@ -62,10 +62,10 @@ bool Clock::onRender(const Timing& timing, Bitmap* pBitmap)
                 pBitmap->fill(x, 0, 8, 8, Bitmap::Clear);
                 char dpchar = '0' + dp;
                 char dpstr[2] { dpchar, 0 };
-                pBitmap->drawText(dpstr, &Fonts::fontC64, x, y + offset, Bitmap::Replace);
+                pBitmap->drawText(dpstr, &Fonts::fontC648, x, y + offset, Bitmap::Replace);
                 char dcchar = '0' + dc;
                 char dcstr[2] { dcchar, 0 };
-                pBitmap->drawText(dcstr, &Fonts::fontC64, x, y, Bitmap::Replace);
+                pBitmap->drawText(dcstr, &Fonts::fontC648, x, y, Bitmap::Replace);
 
                 yp = y;
                 changed = true;
@@ -80,24 +80,5 @@ bool Clock::onRender(const Timing& timing, Bitmap* pBitmap)
         pBitmap->set(32, 5);
     }
 
-    // _lastSecond = pTime->tm_sec;
-
-    // char hrs[3], mins[3], secs[3];
-    // _format(pTime->tm_hour, hrs, 2);
-    // _format(pTime->tm_min, mins, 2);
-    // _format(pTime->tm_sec, secs, 2);
-
-    // pBitmap->drawText(hrs, &Fonts::fontC64, -1, 0, 7);
-    // pBitmap->drawText(mins, &Fonts::fontC64, 16, 0, 7);
-    // pBitmap->drawText(secs, &Fonts::fontC64, 34, 0, 7);
-
     return changed;
-}
-
-void Clock::_format(int value, char* pString, int length, char pad)
-{
-    char format[5] { '%', '0', '2', 'd', 0 };
-    format[1] = pad;
-    format[2] = '0' + (length % 10);
-    snprintf(pString, length + 1, format, value);
 }

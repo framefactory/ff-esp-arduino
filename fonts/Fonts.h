@@ -14,6 +14,7 @@ F_BEGIN_NAMESPACE
 struct Fonts
 {
     static Bitmap font04B24;
+    static Bitmap fontC648;
     static Bitmap fontC64;
 };
 
