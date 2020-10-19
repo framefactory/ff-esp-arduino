@@ -6,8 +6,12 @@
 
 #include "Application.h"
 
-//#include <WiFi.h>
-#include <ESP8266WiFi.h>
+#ifdef ARDUINO_ESP8266_RELEASE
+  #include <ESP8266WiFi.h>
+#else
+#include <WiFi.h>
+  #endif
+
 #include <FS.h>
 
 F_USE_NAMESPACE
