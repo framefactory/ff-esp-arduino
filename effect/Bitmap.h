@@ -42,9 +42,11 @@ public:
     };
 
 public:
+    /// Creates a new bitmap with the given dimensions. If data is given, copies the data to the bitmap.
     Bitmap(int width, int height, const uint8_t* pData = nullptr);
     virtual ~Bitmap();
 
+    /// Sets or clears the pixel at the given position.
     void set(int x, int y, bool state = true) {
         if (x >= _clip.x0 && x < _clip.x1 && y >= _clip.y0 && y < _clip.y1) {
             uint32_t i = y * _width + x;
@@ -53,6 +55,7 @@ public:
         }
     }
 
+    /// Sets the pixel at the given position using the given drawing operation.
     void set(int x, int y, DrawOp op) {
         if (x >= _clip.x0 && x < _clip.x1 && y >= _clip.y0 && y < _clip.y1) {
             uint32_t i = y * _width + x;
@@ -63,6 +66,8 @@ public:
         }
     }
 
+    /// Returns the value of the pixel at the given position.
+    /// Returns false if the position is outside of the bitmap's dimensions.
     bool get(int x, int y) const {
         if (x >= 0 && x < _width && y >= 0 && y < _height) {
             uint32_t i = y * _width + x;
@@ -71,6 +76,7 @@ public:
         return false;
     }
 
+    /// Blends the given pixel with the pixel at the given position using the given mix operation.
     void mix(int x, int y, bool src, MixOp op) {
         if (x >= _clip.x0 && x < _clip.x1 && y >= _clip.y0 && y < _clip.y1) {
             uint32_t i = y * _width + x;
@@ -82,29 +88,48 @@ public:
         }
     }
 
+    /// Draws a line.
     void line(int x0, int y0, int x1, int y1, DrawOp op = Set);
+    /// Draws a rectangle.
     void rect(int x, int y, int width, int height, DrawOp op = Set);
+    /// Fills a rectangular area.
     void fill(int x, int y, int width, int height, DrawOp op = Set);
+    /// Draws a circle.
     void circle(int cx, int cy, int r, DrawOp op = Set);
+    /// Draws an ellipse
     void ellipse(int cx, int cy, int rx, int ry, DrawOp op = Set);
+    /// Draws text using the given bitmap font.
     void drawText(const char* pText, const Bitmap* pFont, int x, int y, int stride = 8, MixOp op = Or);
 
+    /// Copies the source bitmap to this. Source and target offsets and size can be specified.
     void copy(const Bitmap& source, int sx = 0, int sy = 0, int tx = 0, int ty = 0, int w = 0, int h = 0, MixOp op = Replace);
+    /// Copies the source bitmap to this. The source must be of the same size as the target.
     void blit(const Bitmap& source, MixOp op = Replace);
+    /// Clears the bitmap, i.e. sets all pixels to off.
     void clear();
 
+    /// Moves the bitmap's content one pixel to the left.
     void scrollLeft(MixOp op = Replace);
+    /// Moves the bitmap's content one pixel to the right.
     void scrollRight(MixOp op = Replace);
+    /// Moves the bitmap's content one pixel up.
     void scrollUp(MixOp op = Replace);
+    /// Moves the bitmap's content one pixel down.
     void scrollDown(MixOp op = Replace);
 
+    /// Sets a clipping region. This affects all drawing.
     void setClipRegion(int left, int top, int width, int height);
+    /// Clears the clipping region, i.e. sets it to the bitmap's extent.
     void clearClipRegion();
 
+    /// Returns the width of the bitmap.
     int width() const { return _width; }
+    /// Returns the height of the bitmap.
     int height() const { return _height; }
 
+    /// Returns a pointer to the bitmap's data.
     uint8_t* data() { return _pData; }
+    /// Returns a const pointer to the bitmap's data.
     const uint8_t* data() const { return _pData; }
 
 private:

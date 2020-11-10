@@ -68,19 +68,14 @@ size_t Composition::addLayer(Layer* pLayer)
 Layer* Composition::addEffectLayer(Effect* pEffect, MixOp op) 
 {
     Layer* pLayer = new Layer(this, op);
-    pLayer->setEffect(pEffect);
+    pLayer->addEffect(pEffect);
     addLayer(pLayer);
     pEffect->start(*_pTiming);
     return pLayer;
 }
 
-void Composition::insertLayerAt(Layer* pLayer, size_t index) 
+void Composition::removeLayer(Layer* pLayer)
 {
-    _layers.insert(_layers.begin() + index, pLayer);
-}
-
-void Composition::removeLayerAt(size_t index) 
-{
-    auto it = _layers.erase(_layers.begin() + index);
-    delete *it;    
+    _layers.remove(pLayer);
+    delete pLayer;
 }

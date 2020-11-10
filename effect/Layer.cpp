@@ -11,27 +11,34 @@ F_USE_NAMESPACE
 
 Layer::Layer(Composition* pComposition, MixOp op) :
     Bitmap(pComposition->width(), pComposition->height()),
-    _isEnabled(true),
-    _pEffect(nullptr),
     _mixOp(op)
 {
 }
 
 Layer::Layer(int width, int height, MixOp op) :
     Bitmap(width, height),
-    _pEffect(nullptr),
     _mixOp(op)
 {
 }
 
 Layer::~Layer()
 {
-    F_SAFE_DELETE(_pEffect);
+    clearEffects();
 }
 
 void Layer::setEnabled(bool enabled)
 {
     _isEnabled = enabled;
+}
+
+void Layer::setMixOperation(MixOp op) 
+{
+    _mixOp = op;
+}
+
+void Layer::setAutoClear(bool doAutoClear)
+{
+    _doAutoClear = doAutoClear;
 }
 
 bool Layer::render(Timing& timing)
@@ -40,7 +47,16 @@ bool Layer::render(Timing& timing)
         return false;
     }
 
-    return _pEffect->render(timing, this);
+    bool changed = _doAutoClear;
+    if (_doAutoClear) {
+        clear();
+    }
+
+    for (auto pEffect : _effects) {
+        changed = pEffect->render(timing, this) | changed;
+    }
+
+    return changed;
 }
 
 void Layer::compose(Bitmap* pTarget) 
@@ -48,14 +64,22 @@ void Layer::compose(Bitmap* pTarget)
     pTarget->blit(*this, _mixOp);
 }
 
-void Layer::setEffect(Effect* pEffect) 
+void Layer::addEffect(Effect* pEffect) 
 {
-    F_SAFE_DELETE(_pEffect);
-    _pEffect = pEffect;
+    _effects.push_back(pEffect);
 }
 
-void Layer::setMixOperation(MixOp op) 
+void Layer::removeEffect(Effect* pEffect)
 {
-    _mixOp = op;
+    _effects.remove(pEffect);
+    delete pEffect;
 }
 
+void Layer::clearEffects()
+{
+    for (auto pEffect : _effects) {
+        delete pEffect;
+    }
+
+    _effects.clear();
+}

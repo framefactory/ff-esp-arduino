@@ -8,14 +8,17 @@
 
 F_USE_NAMESPACE
 
-BLEMidi::BLEMidi()
+BLEMidi::BLEMidi() :
+    _pCharacteristic(nullptr),
+    _deviceConnected(false),
+    _pListener(nullptr)
 {
 }
 
 void BLEMidi::begin()
 {
     Serial.println("Initializing ESP32 MIDI");
-    BLEDevice::init("ESP32 MIDI");
+    BLEDevice::init("DotMatrix");
 
     BLEServer* pServer = BLEDevice::createServer();
     pServer->setCallbacks(this);
@@ -44,6 +47,19 @@ void BLEMidi::begin()
     pAdvertising->start();
 }
 
+void BLEMidi::setListener(MidiListener* pListener)
+{
+    _pListener = pListener;
+}
+
+MidiMessage BLEMidi::popMessage()
+{
+    MidiMessage message = _eventQueue.front();
+    _eventQueue.pop();
+    return message;
+}
+
+
 void BLEMidi::onConnect(BLEServer* pServer)
 {
     Serial.println("ESP32 MIDI Connected");
@@ -63,10 +79,59 @@ void BLEMidi::onRead(BLECharacteristic* pCharacteristic)
 
 void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
 {
-    Serial.println("ESP32 MIDI onWrite");
-    std::string data = pCharacteristic->getValue();
-    for (size_t i = 2; i < data.size(); ++i) {
-        Serial.printf("#%d: %d\n", i - 2, data[i]);
+    const std::string& data = pCharacteristic->getValue();
+    char rs = 0;
+    char s = 0;
+    size_t i = 2; // start at third byte, discard timestamp
+
+    while (i < data.size()) {
+        // determine status
+        char v = data[i];
+
+        if (v & 0x80) {
+            s = v;
+            ++i;
+            // channel message, update running status
+            if (v < 0xf0) {
+                rs = v;
+            }   
+        }
+        // not a status byte, use running status if available
+        else if (rs > 0) {
+            s = rs;
+        }
+
+        size_t length = MidiMessage::lengthFromStatus(s);
+        MidiMessage message;
+
+        switch(length) {
+        case 0:
+            // system exclusive, read and discard for now
+            if (s == 0xf0) {
+                while(data[i++] != 0xf7);
+            }
+            break;
+        case 1:
+            message.setBytes(s);
+            break;
+        case 2:
+            message.setBytes(s, data[i]);
+            i += 1;
+            break;
+        case 3:
+            message.setBytes(s, data[i], data[i+1]);
+            i += 2;
+            break;    
+        }
+
+        if (length > 0) {
+            if (_pListener) {
+                _pListener->onMidiMessage(message);
+            }
+            else if (_eventQueue.size() < 256) {
+                _eventQueue.push(message);
+            }
+        }
     }
 }
 

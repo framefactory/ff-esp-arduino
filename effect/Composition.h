@@ -11,7 +11,7 @@
 #include "Bitmap.h"
 #include "Layer.h"
 
-#include <vector>
+#include <list>
 
 F_BEGIN_NAMESPACE
 
@@ -21,8 +21,6 @@ class Timing;
 class Composition : public Bitmap
 {
 public:
-    typedef std::vector<Layer*> layerVec_t;
-
     Composition(int width, int height);
     virtual ~Composition();
 
@@ -31,16 +29,15 @@ public:
 
     size_t addLayer(Layer* pLayer);
     Layer* addEffectLayer(Effect* pEffect, MixOp op = Or);
-    void insertLayerAt(Layer* pLayer, size_t index);
-    void removeLayerAt(size_t index);
+    void removeLayer(Layer* pLayer);
 
-    Layer* layer(int index) const { return _layers[index]; }
     size_t numLayers() const { return _layers.size(); }
 
     const Timing* timing() const { return _pTiming; }
 
 private:
-    layerVec_t _layers;
+    typedef std::list<Layer*> layerList_t;
+    layerList_t _layers;
     Timing* _pTiming;
 };
 

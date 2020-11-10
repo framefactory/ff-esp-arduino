@@ -14,6 +14,7 @@ F_BEGIN_NAMESPACE
 
 class MidiStatus
 {
+public:
     enum status_t
     {
         NoteOff         = 0b10000000,
@@ -45,20 +46,35 @@ class MidiStatus
 class MidiMessage
 {
 public:
-    MidiMessage(const std::string& data);
+    /// Returns the number of bytes in a MIDI message based on the given status.
+    static size_t lengthFromStatus(uint8_t status);
+    static const char* nameFromStatus(uint8_t status);
 
-    bool isChannelMessage() const { return (_bytes[0] & 0xf0) == 0xf0; }
+    /// Creates a new MIDI message with the given bytes.
+    MidiMessage(uint8_t status = 0, uint8_t data0 = 0, uint8_t data1 = 0);
 
-    uint8_t status() const { return(_bytes[0] & 0xf0) == 0xf0 ? _bytes[0] : _bytes[0] & 0xf0; }
-    uint8_t channel() const { return _bytes[0] & 0x0f; }
+    /// Sets the message content.
+    void setBytes(uint8_t status, uint8_t data0 = 0, uint8_t data1 = 0);
 
-    uint8_t note() const { return _bytes[1]; }
-    uint8_t program() const { return _bytes[1]; }
-    uint8_t controller() const { return _bytes[1]; }
-    uint8_t velocity() const { return _bytes[2]; }
-    uint8_t value() const { return _bytes[2]; }
+    /// Returns true if this is a channel message.
+    bool isChannelMessage() const { return _bytes[0] < 0xf0; }
+    /// Returns true if this is a system realtime message.
+    bool isSystemRealtime() const { return _bytes[0] & 0xf8; }
 
-    operator std::string() const;
+    uint32_t status() const { return _bytes[0] < 0xf0 ? _bytes[0] & 0xf0 : _bytes[0]; }
+    uint32_t channel() const { return _bytes[0] & 0x0f; }
+
+    uint32_t data0() const { return _bytes[1]; }
+    uint32_t data1() const { return _bytes[2]; }
+    uint32_t note() const { return data0(); }
+    uint32_t program() const { return data0(); }
+    uint32_t controller() const { return data0(); }
+    uint32_t velocity() const { return data1(); }
+    uint32_t value() const { return data1(); }
+    size_t size() const { return lengthFromStatus(_bytes[0]); }
+
+    std::string toString() const;
+    operator std::string() const { return toString(); }
 
 private:
     uint8_t _bytes[3];
