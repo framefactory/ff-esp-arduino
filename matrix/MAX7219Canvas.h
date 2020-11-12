@@ -4,8 +4,8 @@
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_CANVAS_H
-#define _ESP_MATRIX_CANVAS_H
+#ifndef _ESP_MATRIX_MAX7219CANVAS_H
+#define _ESP_MATRIX_MAX7219CANVAS_H
 
 #include "library.h"
 #include "effect/Bitmap.h"
@@ -17,7 +17,7 @@ F_BEGIN_NAMESPACE
 
 class MAX7219Matrix;
 
-class Canvas : public Bitmap
+class MAX7219Canvas : public Bitmap
 {
 public:
     struct mapping_t {
@@ -29,7 +29,7 @@ public:
     typedef std::vector<MAX7219Matrix*> matrixVec_t;
 
     /// Creates a bitmap canvas with the given width and height.
-    Canvas(int width, int height);
+    MAX7219Canvas(int width, int height);
 
     /// Adds a single matrix to the canvas at the given position.
     void addMatrix(MAX7219Matrix* pMatrix, int x, int y);
@@ -51,4 +51,4 @@ private:
 
 F_END_NAMESPACE
 
-#endif // _ESP_MATRIX_CANVAS_H
+#endif // _ESP_MATRIX_MAX7219CANVAS_H

@@ -4,15 +4,11 @@
  * License: MIT
  */
 
-#include "MidiPlayer.h"
+#include "Composable.h"
 
 F_USE_NAMESPACE
 
-MidiPlayer::MidiPlayer()
+void Composable::setEnabled(bool isEnabled)
 {
-}
-
-void MidiPlayer::onMidiMessage(const MidiMessage& message)
-{
-    
+    _isEnabled = isEnabled;
 }

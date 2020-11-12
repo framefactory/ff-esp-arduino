@@ -73,8 +73,8 @@ void Bitmap::line(int x0, int y0, int x1, int y1, DrawOp op)
 
 void Bitmap::rect(int x, int y, int width, int height, DrawOp op)
 {
-    int x1 = x + width;
-    int y1 = y + height;
+    int x1 = x + width - 1;
+    int y1 = y + height - 1;
     line(x, y, x1 - 1, y, op);
     line(x1, y, x1, y1 - 1, op);
     line(x + 1, y1, x1, y1, op);
@@ -185,7 +185,7 @@ void Bitmap::ellipse(int cx, int cy, int rx, int ry, DrawOp op)
     } while (x >= 0);
 }
 
-void Bitmap::drawText(const char *pText, const Bitmap *pFont, int x, int y, int stride, MixOp op)
+void Bitmap::drawText(const char *pText, const Bitmap *pFont, int x, int y, int stride, BlendOp op)
 {
     for (int ic = 0; pText[ic] != 0; ++ic) {
         int dx = x + ic * stride;
@@ -197,23 +197,14 @@ void Bitmap::drawText(const char *pText, const Bitmap *pFont, int x, int y, int 
 
             for (int iy = 0; iy < 8; ++iy) {
                 for (int ix = 0; ix < 8; ++ix) {
-                    mix(dx + ix, y + iy, pFont->get(cx + ix, cy + iy), op);
+                    blend(dx + ix, y + iy, pFont->get(cx + ix, cy + iy), op);
                 }
             }
         }
     }
 }
 
-void Bitmap::copy(const Bitmap &source, int sx, int sy, int tx, int ty, int w, int h, MixOp op)
-{
-    for (int y = 0; y < h; ++y) {
-        for (int x = 0; x < w; ++x) {
-            mix(tx + x, ty + y, source.get(sx + x, sy + y), op);
-        }
-    }
-}
-
-void Bitmap::blit(const Bitmap& source, MixOp op)
+void Bitmap::copy(const Bitmap& source, BlendOp op)
 {
     int size = std::min(_size, source._size);
 
@@ -241,6 +232,15 @@ void Bitmap::blit(const Bitmap& source, MixOp op)
     }
 }
 
+void Bitmap::copy(const Bitmap &source, int sx, int sy, int tx, int ty, int w, int h, BlendOp op)
+{
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            blend(tx + x, ty + y, source.get(sx + x, sy + y), op);
+        }
+    }
+}
+
 void Bitmap::clear()
 {
     for (int i = 0; i < _size; ++i) {
@@ -248,38 +248,38 @@ void Bitmap::clear()
     }
 }
 
-void Bitmap::scrollLeft(MixOp op)
+void Bitmap::scrollLeft(BlendOp op)
 {
     for (int y = 0; y < _height; ++y) {
         for (int x = 1; x < _width; ++x) {
-            mix(x - 1, y, get(x, y), op);
+            blend(x - 1, y, get(x, y), op);
         }
     }
 }
 
-void Bitmap::scrollRight(MixOp op)
+void Bitmap::scrollRight(BlendOp op)
 {
     for (int y = 0; y < _height; ++y) {
         for (int x = _width - 1; x > 0; --x) {
-            mix(x, y, get(x - 1, y), op);
+            blend(x, y, get(x - 1, y), op);
         }
     }
 }
 
-void Bitmap::scrollUp(MixOp op)
+void Bitmap::scrollUp(BlendOp op)
 {
     for (int y = 0; y < _height; ++y) {
         for (int x = 0; x < _width; ++x) {
-            mix(x, y - 1, get(x, y), op);
+            blend(x, y - 1, get(x, y), op);
         }
     }
 }
 
-void Bitmap::scrollDown(MixOp op)
+void Bitmap::scrollDown(BlendOp op)
 {
     for (int y = _height - 1; y > 0; --y) {
         for (int x = 0; x < _width; ++x) {
-            mix(x, y, get(x, y - 1), op);
+            blend(x, y, get(x, y - 1), op);
         }
     }
 }

@@ -8,6 +8,7 @@
 #define _ESP_EFFECT_LAYER_H
 
 #include "library.h"
+#include "Composable.h"
 #include "Bitmap.h"
 #include "Effect.h"
 
@@ -15,50 +16,52 @@
 
 F_BEGIN_NAMESPACE
 
-class Composition;
-
-class Layer : public Bitmap
+class Layer : public Bitmap, Composable
 {
 public:
-    Layer(Composition* pComposition, MixOp op = Or);
-    Layer(int width, int height, MixOp = Or);
+    Layer(Bitmap* pBitmapSize, BlendOp op = Or);
+    Layer(int width, int height, BlendOp = Or);
     virtual ~Layer();
 
-    /// Enables or disables rendering of this layer.
-    void setEnabled(bool enabled);
-    /// Returns true if the layer is enabled, i.e. is rendered.
-    bool enabled() const { return _isEnabled; }
 
-    /// Sets the mix operation used when composing this layer.
-    void setMixOperation(MixOp op);
-    /// Returns the mix operation used when composing this layer.
-    MixOp mixOperation() const { return _mixOp; }
+    /// Sets the blend operation used when composing this layer.
+    void setBlendOperation(BlendOp op);
+    /// Returns the blend operation used when composing this layer.
+    BlendOp blendOperation() const { return _blendOp; }
 
     /// Clears the layer before rendering. Default is true.
     void setAutoClear(bool doAutoClear);
     /// Returns true if the layer is cleared before rendering.
     bool autoClear() const { return _doAutoClear; }
 
-    /// Renders all effects to this layer's bitmap.
-    bool render(Timing& timing);
-    /// Draws this layer onto the given target bitmap using the layer's mix operation.
-    void compose(Bitmap* pTarget);
+    /// Draws this layer onto the given target bitmap using the layer's blend operation.
+    void render(Bitmap* pTarget, Timing& timing) override;
 
-    /// Adds the given effect to the effect list. Takes ownership of the effect.
-    void addEffect(Effect* pEffect);
-    /// Removes the effect from the effect list and deletes it.
-    void removeEffect(Effect* pEffect);
-    /// Removes and deletes all effects.
-    void clearEffects();
+    /// Adds the given composable layer or effect to this layer. Takes ownership.
+    void add(Composable* pComposable);
+    /// Removes a layer or effect and deletes it.
+    void remove(Composable* pComposable);
+    /// Removes and deletes all disabled composables.
+    void removeDisabled();
+    /// Removes and deletes all layers and effects.
+    void removeAll();
+
+    /// Returns the number of layers and effects added to this layer.
+    size_t size() const { return _children.size(); }
+
+protected:
+    /// Renders all children to the given target bitmap.
+    virtual void renderChildren(Bitmap* pTarget, Timing& timing);
+    /// Renders this layer to the given target bitmap.
+    virtual void renderToTarget(Bitmap* pTarget, Timing& timing);
 
 private:
-    typedef std::list<Effect*> effectList_t;
-    effectList_t _effects;
+    typedef std::list<Composable*> composableList_t;
+    composableList_t _children;
     
-    MixOp _mixOp;
+    BlendOp _blendOp;
 
-    bool _isEnabled = true;
-    bool _doAutoClear = true;
+    bool _doAutoClear = false;
 };
 
 F_END_NAMESPACE

@@ -17,7 +17,7 @@ F_BEGIN_NAMESPACE
 class Clock16 : public Effect
 {
 public:
-    virtual bool onRender(const Timing& timing, Bitmap* pBitmap);
+    void onRender(Bitmap* pBitmap, const Timing& timing) override;
     
 private:
     double _t[6] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };

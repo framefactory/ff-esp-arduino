@@ -5,35 +5,29 @@
  */
 
 #include "Layer.h"
-#include "Composition.h"
 
 F_USE_NAMESPACE
 
-Layer::Layer(Composition* pComposition, MixOp op) :
-    Bitmap(pComposition->width(), pComposition->height()),
-    _mixOp(op)
+Layer::Layer(Bitmap* pBitmapSize, BlendOp op) :
+    Bitmap(pBitmapSize->width(), pBitmapSize->height()),
+    _blendOp(op)
 {
 }
 
-Layer::Layer(int width, int height, MixOp op) :
+Layer::Layer(int width, int height, BlendOp op) :
     Bitmap(width, height),
-    _mixOp(op)
+    _blendOp(op)
 {
 }
 
 Layer::~Layer()
 {
-    clearEffects();
+    clear();
 }
 
-void Layer::setEnabled(bool enabled)
+void Layer::setBlendOperation(BlendOp op) 
 {
-    _isEnabled = enabled;
-}
-
-void Layer::setMixOperation(MixOp op) 
-{
-    _mixOp = op;
+    _blendOp = op;
 }
 
 void Layer::setAutoClear(bool doAutoClear)
@@ -41,45 +35,64 @@ void Layer::setAutoClear(bool doAutoClear)
     _doAutoClear = doAutoClear;
 }
 
-bool Layer::render(Timing& timing)
+void Layer::render(Bitmap* pTarget, Timing& timing) 
 {
-    if (!_isEnabled) {
-        return false;
+    if (!enabled()) {
+        return;
     }
 
-    bool changed = _doAutoClear;
     if (_doAutoClear) {
         clear();
     }
 
-    for (auto pEffect : _effects) {
-        changed = pEffect->render(timing, this) | changed;
+    renderChildren(this, timing);
+    renderToTarget(pTarget, timing);
+}
+
+void Layer::add(Composable* pComposable) 
+{
+    _children.push_back(pComposable);
+}
+
+void Layer::remove(Composable* pComposable)
+{
+    _children.remove(pComposable);
+    delete pComposable;
+}
+
+void Layer::removeDisabled()
+{
+    auto it = _children.begin();
+    while (it != _children.end()) {
+        if ((*it)->enabled()) {
+            ++it;
+        }
+        else {
+            auto eraseIt = it;
+            ++it;
+            delete *eraseIt;
+            _children.erase(eraseIt);
+        }
+    }
+}
+
+void Layer::removeAll()
+{
+    for (auto pChild : _children) {
+        delete pChild;
     }
 
-    return changed;
+    _children.clear();
 }
 
-void Layer::compose(Bitmap* pTarget) 
+void Layer::renderChildren(Bitmap* pTarget, Timing& timing)
 {
-    pTarget->blit(*this, _mixOp);
-}
-
-void Layer::addEffect(Effect* pEffect) 
-{
-    _effects.push_back(pEffect);
-}
-
-void Layer::removeEffect(Effect* pEffect)
-{
-    _effects.remove(pEffect);
-    delete pEffect;
-}
-
-void Layer::clearEffects()
-{
-    for (auto pEffect : _effects) {
-        delete pEffect;
+    for (auto pChild : _children) {
+        pChild->render(this, timing);
     }
+}
 
-    _effects.clear();
+void Layer::renderToTarget(Bitmap* pTarget, Timing& timing)
+{
+    pTarget->copy(*this, _blendOp);
 }

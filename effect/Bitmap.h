@@ -34,7 +34,7 @@ public:
         Invert
     };
 
-    enum MixOp {
+    enum BlendOp {
         Replace,
         And,
         Or,
@@ -76,8 +76,8 @@ public:
         return false;
     }
 
-    /// Blends the given pixel with the pixel at the given position using the given mix operation.
-    void mix(int x, int y, bool src, MixOp op) {
+    /// Blends the given pixel with the pixel at the given position using the given blend operation.
+    void blend(int x, int y, bool src, BlendOp op) {
         if (x >= _clip.x0 && x < _clip.x1 && y >= _clip.y0 && y < _clip.y1) {
             uint32_t i = y * _width + x;
             uint8_t& v = _pData[i / 8];
@@ -99,23 +99,23 @@ public:
     /// Draws an ellipse
     void ellipse(int cx, int cy, int rx, int ry, DrawOp op = Set);
     /// Draws text using the given bitmap font.
-    void drawText(const char* pText, const Bitmap* pFont, int x, int y, int stride = 8, MixOp op = Or);
+    void drawText(const char* pText, const Bitmap* pFont, int x, int y, int stride = 8, BlendOp op = Or);
 
-    /// Copies the source bitmap to this. Source and target offsets and size can be specified.
-    void copy(const Bitmap& source, int sx = 0, int sy = 0, int tx = 0, int ty = 0, int w = 0, int h = 0, MixOp op = Replace);
     /// Copies the source bitmap to this. The source must be of the same size as the target.
-    void blit(const Bitmap& source, MixOp op = Replace);
+    void copy(const Bitmap& source, BlendOp op = Replace);
+    /// Copies the source bitmap to this. Source and target offsets and size can be specified.
+    void copy(const Bitmap& source, int sx, int sy, int tx = 0, int ty = 0, int w = 0, int h = 0, BlendOp op = Replace);
     /// Clears the bitmap, i.e. sets all pixels to off.
     void clear();
 
     /// Moves the bitmap's content one pixel to the left.
-    void scrollLeft(MixOp op = Replace);
+    void scrollLeft(BlendOp op = Replace);
     /// Moves the bitmap's content one pixel to the right.
-    void scrollRight(MixOp op = Replace);
+    void scrollRight(BlendOp op = Replace);
     /// Moves the bitmap's content one pixel up.
-    void scrollUp(MixOp op = Replace);
+    void scrollUp(BlendOp op = Replace);
     /// Moves the bitmap's content one pixel down.
-    void scrollDown(MixOp op = Replace);
+    void scrollDown(BlendOp op = Replace);
 
     /// Sets a clipping region. This affects all drawing.
     void setClipRegion(int left, int top, int width, int height);

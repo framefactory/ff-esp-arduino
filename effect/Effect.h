@@ -8,12 +8,13 @@
 #define _ESP_EFFECT_EFFECT_H
 
 #include "library.h"
+#include "Composable.h"
 #include "Timing.h"
 #include "Bitmap.h"
 
 F_BEGIN_NAMESPACE
 
-class Effect
+class Effect : public Composable
 {
 public:
     virtual ~Effect() {}
@@ -22,11 +23,12 @@ public:
     void start(Timing& timing);
     /// Stops the effect.
     void stop(Timing& timing);
-    /// Renders the effect to the given bitmap.
-    bool render(Timing& timing, Bitmap* pBitmap);
+
+    /// Draws this layer onto the given target bitmap using the layer's blend operation.
+    void render(Bitmap* pTarget, Timing& timing) override;
 
     /// Returns true if the effect is currently running.
-    bool isRunning() const { return _isRunning; }
+    bool isActive() const { return _isActive; }
 
 protected:
     /// Called when the effect is started.
@@ -35,12 +37,12 @@ protected:
     virtual void onStop(const Timing& timing);
     /// Called when the effect should render itself. Should return true if the bitmap has changed,
     /// i.e. if any rendering has been performed.
-    virtual bool onRender(const Timing& timing, Bitmap* pBitmap) = 0;
+    virtual void onRender(Bitmap* pBitmap, const Timing& timing) = 0;
 
 private:
-    uint64_t _offsetFrames;
-    double _offsetSeconds;
-    bool _isRunning;
+    uint64_t _offsetFrames = 0;
+    double _offsetSeconds = 0.0;
+    bool _isActive = false;
 };
 
 F_END_NAMESPACE

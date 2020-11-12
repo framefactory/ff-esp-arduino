@@ -8,10 +8,7 @@
 
 F_USE_NAMESPACE
 
-BLEMidi::BLEMidi() :
-    _pCharacteristic(nullptr),
-    _deviceConnected(false),
-    _pListener(nullptr)
+BLEMidi::BLEMidi()
 {
 }
 
@@ -47,100 +44,87 @@ void BLEMidi::begin()
     pAdvertising->start();
 }
 
-void BLEMidi::setListener(MidiListener* pListener)
-{
-    _pListener = pListener;
-}
-
-MidiMessage BLEMidi::popMessage()
-{
-    MidiMessage message = _eventQueue.front();
-    _eventQueue.pop();
-    return message;
-}
-
-
 void BLEMidi::onConnect(BLEServer* pServer)
 {
-    Serial.println("ESP32 MIDI Connected");
+    Serial.println("BLEMidi::onConnect");
     _deviceConnected = true;
+    _runningStatus = 0;
 }
 
 void BLEMidi::onDisconnect(BLEServer* pServer)
 {
-    Serial.println("ESP32 MIDI Disconnected");
+    Serial.println("BLEMidi::onDisconnect");
     _deviceConnected = false;    
 }
 
 void BLEMidi::onRead(BLECharacteristic* pCharacteristic)
 {
-    Serial.println("ESP32 MIDI onRead");
+    Serial.println("BLEMidi::onRead");
 }
 
 void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
 {
     const std::string& data = pCharacteristic->getValue();
-    char rs = 0;
-    char s = 0;
     size_t i = 2; // start at third byte, discard timestamp
 
     while (i < data.size()) {
         // determine status
+        char status = 0;
         char v = data[i];
 
         if (v & 0x80) {
-            s = v;
+            status = v;
             ++i;
             // channel message, update running status
             if (v < 0xf0) {
-                rs = v;
+                _runningStatus = v;
             }   
         }
         // not a status byte, use running status if available
-        else if (rs > 0) {
-            s = rs;
+        else if (_runningStatus > 0) {
+            status = _runningStatus;
         }
 
-        size_t length = MidiMessage::lengthFromStatus(s);
+        // status undetermined, continue with next byte
+        if (status == 0) {
+            continue;
+        }
+
+        size_t length = MidiMessage::lengthFromByte0(status);
         MidiMessage message;
 
         switch(length) {
         case 0:
             // system exclusive, read and discard for now
-            if (s == 0xf0) {
+            if (status == 0xf0) {
                 while(data[i++] != 0xf7);
             }
             break;
         case 1:
-            message.setBytes(s);
+            message.setBytes(status);
             break;
         case 2:
-            message.setBytes(s, data[i]);
+            message.setBytes(status, data[i]);
             i += 1;
             break;
         case 3:
-            message.setBytes(s, data[i], data[i+1]);
+            message.setBytes(status, data[i], data[i+1]);
             i += 2;
             break;    
         }
 
         if (length > 0) {
-            if (_pListener) {
-                _pListener->onMidiMessage(message);
-            }
-            else if (_eventQueue.size() < 256) {
-                _eventQueue.push(message);
-            }
+            enqueueMessage(message);
         }
     }
 }
 
 void BLEMidi::onNotify(BLECharacteristic* pCharacteristic)
 {
-    Serial.println("ESP32 MIDI onNotify");
+    Serial.println("BLEMidi::onNotify");
 }
 
 void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, Status s, uint32_t code)
 {
-    Serial.println("ESP32 MIDI onStatus");
+    Serial.println("BLEMidi::onStatus");
 }

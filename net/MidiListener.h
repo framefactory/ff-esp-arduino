@@ -18,7 +18,9 @@ public:
     virtual ~MidiListener() {}
 
     /// Called if a new MIDI message is received.
-    virtual void onMidiMessage(const MidiMessage& message) = 0;    
+    virtual void onMidiMessage(const MidiMessage& message) = 0;
+    virtual void onRPN(uint16_t param, uint16_t value) = 0;
+    virtual void onNRPN(uint16_t param, uint16_t value) = 0;    
 };
 
 F_END_NAMESPACE

@@ -7,7 +7,6 @@
 #include "Clock16.h"
 
 #include "../Bitmap.h"
-#include "matrix/Canvas.h"
 #include "fonts/Fonts.h"
 #include "core/math.h"
 
@@ -15,10 +14,10 @@
 
 F_USE_NAMESPACE
 
-bool Clock16::onRender(const Timing& timing, Bitmap* pBitmap)
+void Clock16::onRender(Bitmap* pBitmap, const Timing& timing)
 {
-    if (!isRunning()) {
-        return false;
+    if (!isActive()) {
+        return;
     }
 
     tm* pTime = timing.localTime();
@@ -29,8 +28,6 @@ bool Clock16::onRender(const Timing& timing, Bitmap* pBitmap)
     _dc[3] = pTime->tm_min / 10;
     _dc[4] = pTime->tm_hour % 10;
     _dc[5] = pTime->tm_hour / 10;
-
-    bool changed = false;
 
     for (int i = 0; i < 6; ++i) {
         double& t = _t[i];
@@ -68,17 +65,12 @@ bool Clock16::onRender(const Timing& timing, Bitmap* pBitmap)
                 pBitmap->drawText(dcstr, &Fonts::fontC648, x, y, Bitmap::Replace);
 
                 yp = y;
-                changed = true;
             }
         }
     }
 
-    if (changed) {
-        pBitmap->set(15, 2);
-        pBitmap->set(15, 5);
-        pBitmap->set(32, 2);
-        pBitmap->set(32, 5);
-    }
-
-    return changed;
+    pBitmap->set(15, 2);
+    pBitmap->set(15, 5);
+    pBitmap->set(32, 2);
+    pBitmap->set(32, 5);
 }

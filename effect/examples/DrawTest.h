@@ -10,17 +10,12 @@
 #include "../library.h"
 #include "../Effect.h"
 
-#include "matrix/Canvas.h"
-
 F_BEGIN_NAMESPACE
 
 class DrawTest : public Effect
 {
 public:
-    virtual bool onRender(const Timing& timing, Bitmap* pBitmap);
-
-private:
-    int _oldX = 0;
+    void onRender(Bitmap* pBitmap, const Timing& timing) override;
 };
 
 F_END_NAMESPACE

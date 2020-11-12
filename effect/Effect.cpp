@@ -10,7 +10,7 @@ F_USE_NAMESPACE
 
 void Effect::start(Timing& timing)
 {
-    _isRunning = true;
+    _isActive = true;
     _offsetFrames = timing.frames;
     _offsetSeconds = timing.seconds;
     onStart(timing);
@@ -19,14 +19,19 @@ void Effect::start(Timing& timing)
 void Effect::stop(Timing& timing)
 {
     onStop(timing);
-    _isRunning = false;
+    _isActive = false;
 }
 
-bool Effect::render(Timing& timing, Bitmap* pBitmap)
+void Effect::render(Bitmap* pTarget, Timing& timing)
 {
+    if (!enabled()) {
+        return;
+    }
+    
     timing.effectFrames = timing.frames - _offsetFrames;
     timing.effectSeconds = timing.seconds - _offsetSeconds;
-    return onRender(timing, pBitmap);
+
+    onRender(pTarget, timing);
 }
 
 void Effect::onStart(const Timing& timing)
