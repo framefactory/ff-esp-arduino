@@ -17,6 +17,8 @@ SerialUniverse::SerialUniverse(int clockPin, int loadPin, uint32_t delayMicrosec
     _delayMicroseconds(delayMicroseconds),
     _clockPin(clockPin),
     _loadPin(loadPin),
+    _clockPin2(-1),
+    _loadPin2(-1),
     _clockInverted(false),
     _loadInverted(false)
 {
@@ -47,29 +49,50 @@ void SerialUniverse::setLoadPinInverted(bool isInverted)
     _loadInverted = isInverted;
 }
 
+void SerialUniverse::setSecondClockPin(int clockPin2)
+{
+    _clockPin2 = clockPin2;
+    pinMode(clockPin2, OUTPUT);
+}
+
+void SerialUniverse::setSecondLoadPin(int loadPin2)
+{
+    _loadPin2 = loadPin2;
+    pinMode(loadPin2, OUTPUT);
+}
+
 void SerialUniverse::tick()
 {
     digitalWrite(_clockPin, _clockInverted ? LOW : HIGH);
+    if (_clockPin2 >= 0) {
+        digitalWrite(_clockPin2, _clockInverted ? LOW : HIGH);
+    }
+
     if (_delayMicroseconds > 0) {
         delayMicroseconds(_delayMicroseconds);
     }
 
     digitalWrite(_clockPin, _clockInverted ? HIGH : LOW);
-    if (_delayMicroseconds > 0) {
-        delayMicroseconds(_delayMicroseconds);
+    if (_clockPin2 >= 0) {
+        digitalWrite(_clockPin2, _clockInverted ? HIGH : LOW);
     }
 }
 
 void SerialUniverse::load()
 {
     digitalWrite(_loadPin, _loadInverted ? LOW : HIGH);
+    if (_loadPin2 >= 0) {
+        digitalWrite(_loadPin2, _loadInverted ? LOW : HIGH);
+    }
+
     if (_delayMicroseconds > 0) {
         delayMicroseconds(_delayMicroseconds);
     }
 
     digitalWrite(_loadPin, _loadInverted ? HIGH : LOW);
-    if (_delayMicroseconds > 0) {
-        delayMicroseconds(_delayMicroseconds);
+
+    if (_loadPin2 >= 0) {
+        digitalWrite(_loadPin2, _loadInverted ? HIGH : LOW);
     }
 }
 
@@ -85,7 +108,10 @@ void SerialUniverse::flush()
             it->flushBit();
         }
 
-        delayMicroseconds(_delayMicroseconds);
+        if (_delayMicroseconds > 0) {
+            delayMicroseconds(_delayMicroseconds);
+        } 
+
         tick();
     }
 

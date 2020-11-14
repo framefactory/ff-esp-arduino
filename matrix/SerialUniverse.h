@@ -26,6 +26,8 @@ public:
 
     void setClockPinInverted(bool isInverted);
     void setLoadPinInverted(bool isInverted);
+    void setSecondClockPin(int clockPin2);
+    void setSecondLoadPin(int loadPin2);
 
     const SerialChain* chain(uint32_t index) { return _chains[index]; }
     const chainVec_t& chains() const { return _chains; }
@@ -44,6 +46,8 @@ private:
     uint32_t _delayMicroseconds;
     int _clockPin;
     int _loadPin;
+    int _clockPin2;
+    int _loadPin2;
     bool _clockInverted;
     bool _loadInverted;
 };
