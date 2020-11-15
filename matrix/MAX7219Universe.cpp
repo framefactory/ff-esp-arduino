@@ -43,7 +43,13 @@ void MAX7219Universe::initialize()
     writeDisplay();
 }
 
-void MAX7219Universe::setBrightness(uint8_t value)
+void MAX7219Universe::setMaxBrightness(uint8_t value)
+{
+    _maxBrightness = value;
+    Serial.printf("[MAX7219Universe] max brightness: %d\n", value);
+}
+
+void MAX7219Universe::setGlobalBrightness(float value)
 {
     for (auto pChain : _chains) {
         static_cast<MAX7219Chain*>(pChain)->setBrightness(value);
@@ -80,7 +86,7 @@ void MAX7219Universe::writeRow(uint8_t index)
 void MAX7219Universe::writeBrightness()
 {
     for (auto pChain : _chains) {
-        static_cast<MAX7219Chain*>(pChain)->writeBrightness();
+        static_cast<MAX7219Chain*>(pChain)->writeBrightness(_maxBrightness);
     }
 
     flush();

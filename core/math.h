@@ -11,28 +11,33 @@
 
 F_BEGIN_NAMESPACE
 
-template<typename T>
-inline const T& limit(const T& value, const T& min, const T& max) {
-    return value < min ? min : (value > max ? max : value);
-}
+class Math
+{
+private:
+    Math();
 
-template<typename T>
-inline T easeQuad(T t) {
-    return t < T(0.5) ? T(2) * t * t : T(-1) + (T(4.0) - T(2.0) * t) * t;
-}
+public:
+    template<typename T>
+    static inline const T& limit(const T& value, const T& min, const T& max) {
+        return value < min ? min : (value > max ? max : value);
+    }
 
-template<typename T>
-inline T easeInQuad(T t) {
-    return t * t;
-}
+    template<typename T>
+    static inline T easeQuad(T t) {
+        return t < T(0.5) ? T(2) * t * t : T(-1) + (T(4.0) - T(2.0) * t) * t;
+    }
 
-template<typename T>
-inline T easeOutQuad(T t) {
-    return t * (T(2) - t);
-}
+    template<typename T>
+    static inline T easeInQuad(T t) {
+        return t * t;
+    }
 
+    template<typename T>
+    static inline T easeOutQuad(T t) {
+        return t * (T(2) - t);
+    }
 
-
+};
 
 F_END_NAMESPACE
 

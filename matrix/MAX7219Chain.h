@@ -30,7 +30,7 @@ public:
     void setBrightness(uint8_t value);
 
     void writeRow(uint8_t index);
-    void writeBrightness();
+    void writeBrightness(uint8_t maxBrightness);
     void writeRegister(uint8_t reg, uint8_t data);
 };
 

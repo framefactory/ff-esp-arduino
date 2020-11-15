@@ -62,10 +62,10 @@ void MAX7219Chain::writeRow(uint8_t index)
     }
 }
 
-void MAX7219Chain::writeBrightness()
+void MAX7219Chain::writeBrightness(uint8_t maxBrightness)
 {
     for (auto pDevice : _devices) {
-        static_cast<MAX7219Matrix*>(pDevice)->writeBrightness(); 
+        static_cast<MAX7219Matrix*>(pDevice)->writeBrightness(maxBrightness); 
     }
 }
 

@@ -21,7 +21,7 @@ void MAX7219Canvas::addMatrix(MAX7219Matrix* pMatrix, int x, int y)
 
 void MAX7219Canvas::addMatrices(const matrixVec_t& matrices, int xPos, int yPos, int xOffset, int yOffset)
 {
-    for (size_t i = 0; i < matrices.size(); ++i) {
+    for (int i = 0, n = (int)matrices.size(); i < n; ++i) {
        _mappings.push_back({ matrices[i], xPos + xOffset * i, yPos + yOffset * i });
     }
 }

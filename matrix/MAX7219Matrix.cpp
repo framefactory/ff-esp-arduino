@@ -5,13 +5,13 @@
  */
 
 #include "MAX7219Matrix.h"
+#include "core/math.h"
 
 F_USE_NAMESPACE
 
 MAX7219Matrix::MAX7219Matrix() :
     SerialDevice(16),
-    _rows { 0, 0, 0, 0, 0, 0, 0, 0 },
-    _brightness(0x02)
+    _rows { 0, 0, 0, 0, 0, 0, 0, 0 }
 {
 }
 
@@ -30,14 +30,20 @@ void MAX7219Matrix::clear()
     }
 }
 
+void MAX7219Matrix::setBrightness(float value)
+{
+    _brightness = Math::limit(value, 0.0f, 1.0f);
+}
+
 void MAX7219Matrix::writeRow(uint32_t index)
 {
     writeData(((8 - index) << 8) + _rows[index]);
 }
 
-void MAX7219Matrix::writeBrightness()
+void MAX7219Matrix::writeBrightness(uint8_t maxBrightness)
 {
-    writeData((Register::INTENSITY << 8) + _brightness);
+    uint8_t brightness = Math::limit(int(_brightness * maxBrightness), 0, 0x0f);
+    writeData((Register::INTENSITY << 8) + brightness);
 }
 
 void MAX7219Matrix::writeRegister(uint8_t reg, uint8_t data)

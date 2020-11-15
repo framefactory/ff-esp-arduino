@@ -52,17 +52,16 @@ public:
     void setLine(uint32_t y, const char* pLine);
     void clear();
 
-    void setBrightness(uint8_t value) { _brightness = value; }
-    uint8_t brightness() const { return _brightness; }
+    void setBrightness(float value);
+    float brightness() const { return _brightness; }
 
     void writeRow(uint32_t index);
-    void writeBrightness();
-    
+    void writeBrightness(uint8_t maxBrightness);
     void writeRegister(uint8_t reg, uint8_t data);
 
 private:
     uint8_t _rows[8];
-    uint8_t _brightness;
+    float _brightness = 1.0f;
 };
 
 F_END_NAMESPACE
