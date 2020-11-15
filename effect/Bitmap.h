@@ -43,7 +43,7 @@ public:
 
 public:
     /// Creates a new bitmap with the given dimensions. If data is given, copies the data to the bitmap.
-    Bitmap(int width, int height, const uint8_t* pData = nullptr);
+    Bitmap(int width, int height, const uint8_t* pData = nullptr, bool copy = true);
     virtual ~Bitmap();
 
     /// Sets or clears the pixel at the given position.
@@ -138,6 +138,7 @@ private:
     int _size;
 
     uint8_t* _pData;
+    bool _isDataOwner;
     ClipRegion _clip;
 };
 

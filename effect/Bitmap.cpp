@@ -9,27 +9,35 @@
 
 F_USE_NAMESPACE
 
-Bitmap::Bitmap(int width, int height, const uint8_t *pData /* = nullptr */) :
+Bitmap::Bitmap(int width, int height, const uint8_t *pData /* = nullptr */, bool copy /* = true */) :
     _width(width),
     _height(height),
     _size(width * height / 8),
+    _isDataOwner(copy),
     _clip(0, 0, width, height)
 {
-    _pData = new uint8_t[_size];
+    if (copy) {
+        _pData = new uint8_t[_size];
 
-    if (pData) {
-        for (int32_t i = 0; i < _size; ++i) {
-            _pData[i] = pData[i];
+        if (pData) {
+            for (int32_t i = 0; i < _size; ++i) {
+                _pData[i] = pData[i];
+            }
+        }
+        else {
+            clear();
         }
     }
     else {
-        clear();
+        _pData = const_cast<uint8_t*>(pData);
     }
 }
 
 Bitmap::~Bitmap()
 {
-    F_SAFE_DELETE(_pData);
+    if (_isDataOwner) {
+        F_SAFE_DELETE(_pData);
+    }
 }
 
 void Bitmap::line(int x0, int y0, int x1, int y1, DrawOp op)

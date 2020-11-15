@@ -37,6 +37,11 @@ public:
         return t * (T(2) - t);
     }
 
+    template<typename T>
+    static inline T random(T lower, T upper) {
+        return lower + T(std::rand()) / T(RAND_MAX) * (upper - lower);
+    }
+
 };
 
 F_END_NAMESPACE

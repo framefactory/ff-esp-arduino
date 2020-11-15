@@ -7,12 +7,15 @@
 #include "Clock16.h"
 
 #include "../Bitmap.h"
-#include "fonts/Fonts.h"
 #include "core/math.h"
 
 #include <time.h>
 
 F_USE_NAMESPACE
+
+extern const uint8_t data_dm8_c648[] asm("_binary_bin_dm8_c648_bin_start");
+static const Bitmap fontC648(128, 64, data_dm8_c648, false);
+
 
 void Clock16::onRender(Bitmap* pBitmap, const Timing& timing)
 {
@@ -59,10 +62,10 @@ void Clock16::onRender(Bitmap* pBitmap, const Timing& timing)
                 pBitmap->fill(x, 0, 8, 8, Bitmap::Clear);
                 char dpchar = '0' + dp;
                 char dpstr[2] { dpchar, 0 };
-                pBitmap->drawText(dpstr, &Fonts::fontC648, x, y + offset, Bitmap::Replace);
+                pBitmap->drawText(dpstr, &fontC648, x, y + offset, Bitmap::Replace);
                 char dcchar = '0' + dc;
                 char dcstr[2] { dcchar, 0 };
-                pBitmap->drawText(dcstr, &Fonts::fontC648, x, y, Bitmap::Replace);
+                pBitmap->drawText(dcstr, &fontC648, x, y, Bitmap::Replace);
 
                 yp = y;
             }
