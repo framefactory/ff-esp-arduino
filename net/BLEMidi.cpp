@@ -67,6 +67,14 @@ void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
     const std::string& data = pCharacteristic->getValue();
     size_t i = 2; // start at third byte, discard timestamp
 
+    if (F_DEBUG) {
+        Serial.print("[BLEMidi] message: ");
+        for (size_t j = 0; j < data.size(); ++j) {
+            Serial.printf("%d, ", int(data[j]));
+        }
+        Serial.print("\n");
+    }
+
     while (i < data.size()) {
         // determine status
         char status = 0;

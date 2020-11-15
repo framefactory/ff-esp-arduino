@@ -10,6 +10,9 @@
 #include <cstdint>
 #include <Arduino.h>
 
+// DEBUG
+#define F_DEBUG 1
+
 // MACROS
 #define F_BEGIN_NAMESPACE namespace ff {
 #define F_END_NAMESPACE }
