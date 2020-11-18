@@ -38,6 +38,9 @@ private:
     BLECharacteristic* _pCharacteristic = nullptr;
     bool _deviceConnected = false;
     char _runningStatus = 0;
+
+    char _sysex[128];
+    int _sysexPtr;
 };
 
 F_END_NAMESPACE

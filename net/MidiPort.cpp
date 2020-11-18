@@ -25,6 +25,12 @@ void MidiPort::dispatch()
         dispatchMessage(message);
     }
 
+    while(!_sysExQueue.empty()) {
+        std::string sysExMessage = _sysExQueue.front();
+        _sysExQueue.pop();
+        dispatchSysEx(sysExMessage);
+    }
+
     xSemaphoreGive(_mutex);
 }
 
@@ -98,6 +104,26 @@ void MidiPort::enqueueMessage(const MidiMessage& message)
     }
 
     _messageQueue.emplace(message);
+
+    xSemaphoreGive(_mutex);
+}
+
+void MidiPort::dispatchSysEx(const std::string& sysEx)
+{
+    if (_pListener) {
+        _pListener->onSysEx(sysEx);
+    }
+}
+
+void MidiPort::enqueueSysEx(const std::string& sysEx)
+{
+    xSemaphoreTake(_mutex, portMAX_DELAY);
+
+    while(_sysExQueue.size() > QUEUE_MAX_SIZE) {
+        _sysExQueue.pop();
+    }
+
+    _sysExQueue.emplace(sysEx);
 
     xSemaphoreGive(_mutex);
 }

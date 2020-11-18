@@ -108,9 +108,13 @@ void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
 
         switch(length) {
         case 0:
-            // system exclusive, read and discard for now
+            // TODO: system exclusive, do we always get the entire message?
             if (status == 0xf0) {
+                size_t pos = i - 1;
                 while(data[i++] != 0xf7);
+                // enqueue message without EOX
+                enqueueSysEx(data.substr(pos, i - pos - 2));
+                continue;
             }
             break;
         case 1:

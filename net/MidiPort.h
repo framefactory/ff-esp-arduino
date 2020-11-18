@@ -32,12 +32,18 @@ public:
 protected:
     void dispatchMessage(const MidiMessage& message);
     void enqueueMessage(const MidiMessage& message);
+    
+    void dispatchSysEx(const std::string& sysEx);
+    void enqueueSysEx(const std::string& sysEx);
 
 private:
     MidiListener* _pListener;
 
     typedef std::queue<MidiMessage> messageQueue_t;
     messageQueue_t _messageQueue;
+
+    typedef std::queue<std::string> sysExQueue_t;
+    sysExQueue_t _sysExQueue;
 
     uint16_t _rpn_param = 0x8000;
     uint16_t _nrpn_param = 0x8000;
