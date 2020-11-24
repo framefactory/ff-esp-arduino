@@ -76,6 +76,10 @@ void SerialUniverse::tick()
     if (_clockPin2 >= 0) {
         digitalWrite(_clockPin2, _clockInverted ? HIGH : LOW);
     }
+
+    //if (_delayMicroseconds > 0) {
+    //    delayMicroseconds(_delayMicroseconds);
+    //}
 }
 
 void SerialUniverse::load()
@@ -94,6 +98,10 @@ void SerialUniverse::load()
     if (_loadPin2 >= 0) {
         digitalWrite(_loadPin2, _loadInverted ? HIGH : LOW);
     }
+
+    //if (_delayMicroseconds > 0) {
+    //    delayMicroseconds(_delayMicroseconds);
+    //}
 }
 
 void SerialUniverse::flush()
