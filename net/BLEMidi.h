@@ -32,7 +32,7 @@ protected:
     virtual void onRead(BLECharacteristic* pCharacteristic) override;
 	virtual void onWrite(BLECharacteristic* pCharacteristic) override;
 	virtual void onNotify(BLECharacteristic* pCharacteristic) override;
-	virtual void onStatus(BLECharacteristic* pCharacteristic, Status s, uint32_t code) override;
+	virtual void onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCallbacks::Status s, uint32_t code) override;
 
 private:
     BLECharacteristic* _pCharacteristic = nullptr;

@@ -141,7 +141,7 @@ void BLEMidi::onNotify(BLECharacteristic* pCharacteristic)
     Serial.println("BLEMidi::onNotify");
 }
 
-void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, Status s, uint32_t code)
+void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCallbacks::Status s, uint32_t code)
 {
     Serial.println("BLEMidi::onStatus");
 }
