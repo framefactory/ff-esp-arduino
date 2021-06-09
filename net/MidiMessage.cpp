@@ -42,6 +42,10 @@ size_t MidiMessage::lengthFromByte0(uint8_t byte0)
 MidiMessage::MidiMessage(uint8_t status /* = 0 */, uint8_t data0 /* = 0 */, uint8_t data1 /* = 0 */) :
     _bytes { status, data0, data1 }
 {
+    // convert NoteOn with velocity zero to NoteOff
+    if (status < 0xf0 && (status & 0xf0) == MidiStatus::NoteOn && data1 == 0) {
+        _bytes[0] = MidiStatus::NoteOff | (status & 0x0f);
+    }
 }
 
 void MidiMessage::setBytes(uint8_t status, uint8_t data0 /* = 0 */, uint8_t data1 /* = 0 */)

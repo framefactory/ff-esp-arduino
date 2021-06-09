@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_TOOLS_H
 #define _ESP_CORE_TOOLS_H
 
-#include "library.h"
+#include "../library.h"
 
 F_BEGIN_NAMESPACE
 

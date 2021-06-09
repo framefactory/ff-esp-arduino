@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_PARTICLE2T_H
 #define _ESP_CORE_PARTICLE2T_H
 
-#include "library.h"
+#include "../library.h"
 #include "Vector2T.h"
 
 F_BEGIN_NAMESPACE

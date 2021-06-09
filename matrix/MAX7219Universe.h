@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_MAX7219UNIVERSE_H
 #define _ESP_MATRIX_MAX7219UNIVERSE_H
 
-#include "library.h"
+#include "../library.h"
 #include "SerialUniverse.h"
 
 F_BEGIN_NAMESPACE

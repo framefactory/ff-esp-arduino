@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_MAX7219MATRIX_H
 #define _ESP_MATRIX_MAX7219MATRIX_H
 
-#include "library.h"
+#include "../library.h"
 #include "SerialDevice.h"
 
 #include <string>

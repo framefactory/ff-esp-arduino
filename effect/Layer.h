@@ -7,7 +7,7 @@
 #ifndef _ESP_EFFECT_LAYER_H
 #define _ESP_EFFECT_LAYER_H
 
-#include "library.h"
+#include "../library.h"
 #include "Composable.h"
 #include "Bitmap.h"
 #include "Effect.h"

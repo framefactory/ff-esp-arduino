@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_MIDICONTROLLER_H
 #define _ESP_NET_MIDICONTROLLER_H
 
-#include "library.h"
+#include "../library.h"
 
 F_BEGIN_NAMESPACE
 

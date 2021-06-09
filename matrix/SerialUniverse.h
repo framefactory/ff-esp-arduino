@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_SERIALUNIVERSE_H
 #define _ESP_MATRIX_SERIALUNIVERSE_H
 
-#include "library.h"
+#include "../library.h"
 #include <vector>
 
 F_BEGIN_NAMESPACE

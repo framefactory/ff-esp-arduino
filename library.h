@@ -1,11 +1,11 @@
 /**
- * ESP/Arduino Matrix Library
+ * ESP/Arduino Core Library
  * Copyright 2020 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_LIBRARY_H
-#define _ESP_MATRIX_LIBRARY_H
+#ifndef _ESP_CORE_LIBRARY_H
+#define _ESP_CORE_LIBRARY_H
 
 #include <cstdint>
 #include <Arduino.h>
@@ -17,4 +17,6 @@
 
 #define F_SAFE_DELETE(p) if (p) { delete (p); (p) = nullptr; }
 
-#endif // _ESP_MATRIX_LIBRARY_H
+#define F_DISABLE_COPY(Class) private: Class(const Class& other); Class& operator=(const Class& other);
+
+#endif // _ESP_CORE_LIBRARY_H

@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_BLEMIDI_H
 #define _ESP_NET_BLEMIDI_H
 
-#include "library.h"
+#include "../library.h"
 #include "MidiPort.h"
 
 #include <BLEDevice.h>
@@ -20,10 +20,12 @@ F_BEGIN_NAMESPACE
 class BLEMidi : public MidiPort, BLEServerCallbacks, BLECharacteristicCallbacks
 {
 public:
-    BLEMidi();
+    BLEMidi(const std::string& deviceName = std::string());
     virtual ~BLEMidi() {}
 
     void begin();
+
+    std::string deviceName() const { return _deviceName; }
 
 protected:
     virtual void onConnect(BLEServer* pServer) override;
@@ -35,6 +37,7 @@ protected:
 	virtual void onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCallbacks::Status s, uint32_t code) override;
 
 private:
+    std::string _deviceName;
     BLECharacteristic* _pCharacteristic = nullptr;
     bool _deviceConnected = false;
     char _runningStatus = 0;

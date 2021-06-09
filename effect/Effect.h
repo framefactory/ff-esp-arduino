@@ -7,7 +7,7 @@
 #ifndef _ESP_EFFECT_EFFECT_H
 #define _ESP_EFFECT_EFFECT_H
 
-#include "library.h"
+#include "../library.h"
 #include "Composable.h"
 #include "Timing.h"
 #include "Bitmap.h"

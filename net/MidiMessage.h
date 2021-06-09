@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_MIDIMESSAGE_H
 #define _ESP_NET_MIDIMESSAGE_H
 
-#include "library.h"
+#include "../library.h"
 #include "MidiStatus.h"
 
 #include <string>

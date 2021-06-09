@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_VECTOR2T_H
 #define _ESP_CORE_VECTOR2T_H
 
-#include "library.h"
+#include "../library.h"
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>

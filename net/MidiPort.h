@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_MIDIPORT_H
 #define _ESP_NET_MIDIPORT_H
 
-#include "library.h"
+#include "../library.h"
 #include "MidiListener.h"
 #include "MidiMessage.h"
 

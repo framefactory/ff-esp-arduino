@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_SERIALDEVICE_H
 #define _ESP_MATRIX_SERIALDEVICE_H
 
-#include "library.h"
+#include "../library.h"
 
 F_BEGIN_NAMESPACE
 

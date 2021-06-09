@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_APPLICATION_H
 #define _ESP_CORE_APPLICATION_H
 
-#include "library.h"
+#include "../library.h"
 #include "Environment.h"
 
 F_BEGIN_NAMESPACE

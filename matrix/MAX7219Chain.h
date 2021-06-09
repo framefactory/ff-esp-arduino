@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_MAX7219CHAIN_H
 #define _ESP_MATRIX_MAX7219CHAIN_H
 
-#include "library.h"
+#include "../library.h"
 #include "SerialChain.h"
 
 F_BEGIN_NAMESPACE

@@ -8,14 +8,15 @@
 
 F_USE_NAMESPACE
 
-BLEMidi::BLEMidi()
+BLEMidi::BLEMidi(const std::string& deviceName) :
+    _deviceName(deviceName)
 {
 }
 
 void BLEMidi::begin()
 {
     Serial.println("Initializing ESP32 MIDI");
-    BLEDevice::init("DotMatrix");
+    BLEDevice::init(_deviceName);
 
     BLEServer* pServer = BLEDevice::createServer();
     pServer->setCallbacks(this);
@@ -46,20 +47,20 @@ void BLEMidi::begin()
 
 void BLEMidi::onConnect(BLEServer* pServer)
 {
-    Serial.println("BLEMidi::onConnect");
+    Serial.println("[BLEMidi] onConnect");
     _deviceConnected = true;
     _runningStatus = 0;
 }
 
 void BLEMidi::onDisconnect(BLEServer* pServer)
 {
-    Serial.println("BLEMidi::onDisconnect");
+    Serial.println("[BLEMidi] onDisconnect");
     _deviceConnected = false;    
 }
 
 void BLEMidi::onRead(BLECharacteristic* pCharacteristic)
 {
-    Serial.println("BLEMidi::onRead");
+    Serial.println("[BLEMidi] onRead");
 }
 
 void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
@@ -138,10 +139,10 @@ void BLEMidi::onWrite(BLECharacteristic* pCharacteristic)
 
 void BLEMidi::onNotify(BLECharacteristic* pCharacteristic)
 {
-    Serial.println("BLEMidi::onNotify");
+    Serial.println("[BLEMidi] onNotify");
 }
 
 void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCallbacks::Status s, uint32_t code)
 {
-    Serial.println("BLEMidi::onStatus");
+    Serial.println("[BLEMidi] onStatus");
 }

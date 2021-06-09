@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_RANDOM_H
 #define _ESP_CORE_RANDOM_H
 
-#include "library.h"
+#include "../library.h"
 
 F_BEGIN_NAMESPACE
 

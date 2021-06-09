@@ -7,7 +7,7 @@
 #ifndef _ESP_EFFECT_TIMING_H
 #define _ESP_EFFECT_TIMING_H
 
-#include "library.h"
+#include "../library.h"
 
 #include <sys/time.h>
 #include <time.h>

@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_MIDILISTENER_H
 #define _ESP_NET_MIDILISTENER_H
 
-#include "library.h"
+#include "../library.h"
 #include "MidiMessage.h"
 
 F_BEGIN_NAMESPACE

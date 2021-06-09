@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_MAX7219CANVAS_H
 #define _ESP_MATRIX_MAX7219CANVAS_H
 
-#include "library.h"
+#include "../library.h"
 #include "effect/Bitmap.h"
 
 #include <vector>

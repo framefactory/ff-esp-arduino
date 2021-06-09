@@ -7,7 +7,7 @@
 #ifndef _ESP_CORE_PARTICLE1T_H
 #define _ESP_CORE_PARTICLE1T_H
 
-#include "library.h"
+#include "../library.h"
 #include <cmath>
 
 F_BEGIN_NAMESPACE

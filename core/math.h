@@ -1,15 +1,24 @@
 /**
- * ESP/Arduino CORE Library
- * Copyright 2020 Frame Factory GmbH, Ralph Wiedemeier
+ * ESP/Arduino Core Library
+ * Copyright 2021 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
 #ifndef _ESP_CORE_MATH_H
 #define _ESP_CORE_MATH_H
 
-#include "library.h"
+#include "../library.h"
+#include <math.h>
 
 F_BEGIN_NAMESPACE
+
+#define F_PI		3.1415926535897932384626433832795
+#define F_2PI		6.283185307179586476925286766559
+#define F_PI2		1.5707963267948966192313216916398
+#define F_PI4		0.78539816339744830961566084581988
+#define F_EULER		2.7182818284590452353602874713526624977572
+#define F_R2D		57.295779513082320876798154814114
+#define F_D2R		0.017453292519943295769236907684883
 
 class Math
 {
@@ -17,6 +26,23 @@ private:
     Math();
 
 public:
+    /// Mathematical constant pi.
+    static const double pi;
+    /// Pi times 2.
+    static const double pi2;
+    /// Pi divided by 2.
+    static const double piHalf;
+    /// Pi divided by 4.
+    static const double piQuarter;
+
+    /// Euler's number.
+    static const double e;
+
+    /// Multiplication constant for radian to degree conversion.
+    static const double r2d;
+    /// Multiplication constant for degree to radian conversion.
+    static const double d2r;
+
     template<typename T>
     static inline const T& limit(const T& value, const T& min, const T& max) {
         return value < min ? min : (value > max ? max : value);

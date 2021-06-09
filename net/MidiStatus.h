@@ -7,7 +7,7 @@
 #ifndef _ESP_NET_MIDISTATUS_H
 #define _ESP_NET_MIDISTATUS_H
 
-#include "library.h"
+#include "../library.h"
 
 F_BEGIN_NAMESPACE
 

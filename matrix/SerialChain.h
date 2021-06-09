@@ -7,7 +7,7 @@
 #ifndef _ESP_MATRIX_SERIALCHAIN_H
 #define _ESP_MATRIX_SERIALCHAIN_H
 
-#include "library.h"
+#include "../library.h"
 #include "SerialDevice.h"
 #include <vector>
 
