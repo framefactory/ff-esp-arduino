@@ -10,6 +10,7 @@
 #include "../library.h"
 #include "MidiPort.h"
 
+/*
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -47,5 +48,5 @@ private:
 };
 
 F_END_NAMESPACE
-
+*/
 #endif // _ESP_NET_BLEMIDI_H

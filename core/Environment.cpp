@@ -46,7 +46,7 @@ bool Environment::read()
             String value = line.substring(sep + 1);
             value.trim();
 
-            _variables.emplace(key, value);    
+            _variables.emplace(key, value);
         }
     }
 
@@ -55,7 +55,7 @@ bool Environment::read()
 
 const String& Environment::get(const String& key, const String& preset) const
 {
-        auto it = _variables.find(key);
+    auto it = _variables.find(key);
     if (it != _variables.end()) {
         return it->second;
     }

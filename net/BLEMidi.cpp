@@ -7,7 +7,7 @@
 #include "BLEMidi.h"
 
 F_USE_NAMESPACE
-
+/*
 BLEMidi::BLEMidi(const std::string& deviceName) :
     _deviceName(deviceName)
 {
@@ -146,3 +146,4 @@ void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCall
 {
     Serial.println("[BLEMidi] onStatus");
 }
+*/
