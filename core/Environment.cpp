@@ -37,16 +37,18 @@ bool Environment::read()
 
     while(file.available()) {
         String line = file.readStringUntil('\n');
-        int sep = line.indexOf('=');
+        if (line[0] != '#') {
+            int sep = line.indexOf('=');
 
-        if (sep > 0) {
-            String key = line.substring(0, sep);
-            key.trim();
+            if (sep > 0) {
+                String key = line.substring(0, sep);
+                key.trim();
 
-            String value = line.substring(sep + 1);
-            value.trim();
+                String value = line.substring(sep + 1);
+                value.trim();
 
-            _variables.emplace(key, value);
+                _variables.emplace(key, value);
+            }
         }
     }
 

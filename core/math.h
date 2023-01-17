@@ -43,9 +43,22 @@ public:
     /// Multiplication constant for degree to radian conversion.
     static const double d2r;
 
+    /// Keeps value within the interval [min, max].
     template<typename T>
-    static inline const T& limit(const T& value, const T& min, const T& max) {
+    static inline const T& clamp(const T& value, const T& min, const T& max) {
         return value < min ? min : (value > max ? max : value);
+    }
+
+    /// Returns the smallest of the three values.
+    template<typename T>
+    static inline const T& tripleMin(const T& a, const T& b, const T& c) {
+        return a < b ? (a < c ? a : c) : (b < c ? b : c);
+    }
+
+    /// Returns the largest of the three values.
+    template<typename T>
+    static inline const T& tripleMax(const T& a, const T& b, const T& c) {
+        return a > b ? (a > c ? a : c) : (b > c ? b : c);
     }
 
     template<typename T>
