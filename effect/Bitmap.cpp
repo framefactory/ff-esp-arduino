@@ -294,10 +294,10 @@ void Bitmap::scrollDown(BlendOp op)
 
 void Bitmap::setClipRegion(int left, int top, int width, int height)
 {
-    _clip.x0 = Math::limit(left, 0, _width);
-    _clip.y0 = Math::limit(top, 0, _height);
-    _clip.x1 = Math::limit(left + width, 0, _width);
-    _clip.y1 = Math::limit(top + height, 0, _height); 
+    _clip.x0 = Math::clamp(left, 0, _width);
+    _clip.y0 = Math::clamp(top, 0, _height);
+    _clip.x1 = Math::clamp(left + width, 0, _width);
+    _clip.y1 = Math::clamp(top + height, 0, _height); 
 }
 
 void Bitmap::clearClipRegion()

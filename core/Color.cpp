@@ -66,8 +66,8 @@ Color& Color::setHSL(float hue, float saturation, float luminance, float alpha)
 
 ColorHSV Color::toHSV() const
 {
-    float min = std::min(r, g, b);
-    float max = std::max(r, g, b);
+    float min = r < g ? (r < b ? r : b) : (g < b ? g : b);
+    float max = r > g ? (r > b ? r : b) : (g > b ? g : b);
     float d = max - min;
     float h = 0;
     float s = max == 0.0f ? 0.0f : d / max;
@@ -84,8 +84,8 @@ ColorHSV Color::toHSV() const
 
 ColorHSL Color::toHSL() const
 {
-    float min = std::min(r, g, b);
-    float max = std::max(r, g, b);
+    float min = r < g ? (r < b ? r : b) : (g < b ? g : b);
+    float max = r > g ? (r > b ? r : b) : (g > b ? g : b);
     float d = max - min;
     float h = 0.0f, s = 0.0f;
     float l = (max + min) * 0.5f;

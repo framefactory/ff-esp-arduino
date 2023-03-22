@@ -128,9 +128,6 @@ public:
     /// Returns true if all components are equal to one.
     bool allOne() const;
 
-    /// Converts the vector to a JSON array.
-    nlohmann::json toJSON() const;
-
     //  Public data --------------------------------------------------
 
     REAL x;

@@ -45,7 +45,7 @@ public:
     static Color fromUint32(uint32_t rgbaColor);
 
     /// Default constructor. Creates an uninitialized color.
-    Color() { };
+    Color() : r(0.0f), g(0.0f), b(0.0f), a(0.0f)  { };
     Color(float r, float g, float b, float a = 1.0f);
     explicit Color(const float* pValues);
 
@@ -57,6 +57,8 @@ public:
     uint8_t blueByte() const { return uint8_t(b * 255.0f); }
     uint8_t alphaByte() const { return uint8_t(a * 255.0f); }
 
+    Color& copy(const Color& other);
+
     Color& set(float red, float green, float blue, float alpha = 1.0f);
     Color& set(uint8_t redByte, uint8_t greenByte, uint8_t blueByte, uint8_t alpha = 255);
 
@@ -65,6 +67,8 @@ public:
 
     ColorHSV toHSV() const;
     ColorHSL toHSL() const;
+
+    Color& mix(const Color& other, float factor);
 
     Color& clamp(float lowerLimit = 0.0f, float upperLimit = 1.0f);
     Color clamped(float lowerLimit = 0.0f, float upperLimit = 1.0f) const {
@@ -108,6 +112,13 @@ inline Color::Color(const float* pValues) :
 {
 }
 
+inline Color& Color::copy(const Color& other) {
+    r = other.r;
+    g = other.g;
+    b = other.b;
+    a = other.a;
+    return *this;
+}
 
 inline Color& Color::set(float red, float green, float blue, float alpha) {
     r = red;
@@ -122,6 +133,15 @@ inline Color& Color::set(uint8_t redByte, uint8_t greenByte, uint8_t blueByte, u
     g = float(greenByte) / 255.0f;
     b = float(blueByte) / 255.0f;
     a = float(alphaByte) / 255.0f;
+    return *this;
+}
+
+inline Color& Color::mix(const Color& other, float factor) {
+    float invFactor = 1.0f - factor;
+    r = invFactor * r + factor * other.r;
+    g = invFactor * g + factor * other.g;
+    b = invFactor * b + factor * other.b;
+    a = invFactor * a + factor * other.a;
     return *this;
 }
 

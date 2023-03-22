@@ -32,7 +32,7 @@ void MAX7219Matrix::clear()
 
 void MAX7219Matrix::setBrightness(float value)
 {
-    _brightness = Math::limit(value, 0.0f, 1.0f);
+    _brightness = Math::clamp(value, 0.0f, 1.0f);
 }
 
 void MAX7219Matrix::writeRow(uint32_t index)
@@ -42,7 +42,7 @@ void MAX7219Matrix::writeRow(uint32_t index)
 
 void MAX7219Matrix::writeBrightness(uint8_t maxBrightness)
 {
-    uint8_t brightness = Math::limit(int(_brightness * maxBrightness), 0, 0x0f);
+    uint8_t brightness = Math::clamp(int(_brightness * maxBrightness), 0, 0x0f);
     writeData((Register::INTENSITY << 8) + brightness);
 }
 
