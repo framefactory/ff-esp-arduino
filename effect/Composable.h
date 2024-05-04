@@ -13,12 +13,13 @@
 
 F_BEGIN_NAMESPACE
 
+/// Interface for objects that can be rendered onto a bitmap.
 class Composable
 {
 public:
     virtual ~Composable() {}
 
-    /// Renders the composable and draws itonto the given target bitmap.
+    /// Renders the composable and draws it onto the given target bitmap.
     virtual void render(Bitmap* pTarget, Timing& timing) = 0;
 
     /// Enables or disables rendering of this composable.

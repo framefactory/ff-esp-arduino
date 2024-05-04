@@ -25,6 +25,7 @@ struct ClipRegion
     int y1;
 };
 
+/// A bitmap is a two-dimensional array of pixels. Each pixel can be on or off.
 class Bitmap
 {
 public:

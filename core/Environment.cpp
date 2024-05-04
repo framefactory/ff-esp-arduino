@@ -21,7 +21,6 @@ Environment::Environment(const String& filePath) :
 
 bool Environment::read()
 {
-    SPIFFS.begin();
     #ifdef ARDUINO_ESP8266_RELEASE
     File file = SPIFFS.open(_filePath, "r");
     #else
@@ -30,6 +29,10 @@ bool Environment::read()
     
     if (!file) {
         Serial.printf("Failed to open environment file at '%s'", _filePath.c_str());
+        return false;
+    }
+    if (!file.available()) {
+        Serial.println("Environment file is empty");
         return false;
     }
 

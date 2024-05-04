@@ -12,6 +12,8 @@
 
 F_BEGIN_NAMESPACE
 
+/// Reads environment variables from a SPIFFS file and provides methods
+/// to access and convert the values.
 class Environment
 {
 public:

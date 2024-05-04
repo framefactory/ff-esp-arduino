@@ -6,13 +6,7 @@
 
 #include "Application.h"
 
-#ifdef ARDUINO_ESP8266_RELEASE
-  #include <ESP8266WiFi.h>
-#else
 #include <WiFi.h>
-#endif
-
-#include <FS.h>
 
 F_USE_NAMESPACE
 
@@ -23,23 +17,20 @@ Application::Application()
 void Application::setup()
 {
     Serial.begin(115200);
-    Serial.println();
+    Serial.println("[Application.setup] serial port initialized");
 }
 
 void Application::connectWifi(const char* ssid, const char* password)
 {
-    Serial.printf("Connecting to WiFi, SSID: %s ", ssid);
-    int wifiStatus = WiFi.begin(ssid, password);
+     // switch to station mode
+    WiFi.mode(WIFI_STA);
 
-    while (wifiStatus != WL_CONNECTED) {
+    Serial.printf("[Application.connectWifi] Connecting to SSID: %s ", ssid);
+    WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
-        
-        #ifdef ARDUINO_ESP8266_RELEASE
-        wifiStatus = WiFi.status();
-        #else
-        wifiStatus = WiFi.begin(ssid, password);
-        #endif
     }
 
     IPAddress ip = WiFi.localIP();

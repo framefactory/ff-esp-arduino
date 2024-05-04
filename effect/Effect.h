@@ -35,8 +35,7 @@ protected:
     virtual void onStart(const Timing& timing);
     /// Called when the effect is stopped.
     virtual void onStop(const Timing& timing);
-    /// Called when the effect should render itself. Should return true if the bitmap has changed,
-    /// i.e. if any rendering has been performed.
+    /// Called when the effect should render itself.
     virtual void onRender(Bitmap* pBitmap, const Timing& timing) = 0;
 
 private:

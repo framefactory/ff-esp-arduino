@@ -16,13 +16,19 @@
 
 F_BEGIN_NAMESPACE
 
+/// A layer is a bitmap that can have multiple composables rendering onto it.
 class Layer : public Bitmap, Composable
 {
 public:
+    /// Creates a new layer with the size of the given bitmap.
+    /// The layer's default blend operation is set to Or.
     Layer(Bitmap* pBitmapSize, BlendOp op = Or);
+    /// Creates a new layer with the given width and height.
+    /// The layer's default blend operation is set to Or.
     Layer(int width, int height, BlendOp = Or);
-    virtual ~Layer();
 
+    /// Destructor.
+    virtual ~Layer();
 
     /// Sets the blend operation used when composing this layer.
     void setBlendOperation(BlendOp op);
