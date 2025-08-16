@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Matrix Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_SERIALCHAIN_H
-#define _ESP_MATRIX_SERIALCHAIN_H
+#pragma once
 
 #include "../library.h"
 #include "SerialDevice.h"
@@ -65,5 +64,3 @@ void ff::SerialChain::flushBit()
 
     digitalWrite(_dataPin, _dataInverted ^ bit ? HIGH : LOW);
 }
-
-#endif // _ESP_MATRIX_SERIALCHAIN_H

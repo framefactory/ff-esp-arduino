@@ -1,6 +1,6 @@
 /**
  * ESP/Arduino Effect Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 

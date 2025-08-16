@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_CORE_VECTOR4T_H
-#define _ESP_CORE_VECTOR4T_H
+#pragma once
 
 #include "../library.h"
 
@@ -642,5 +641,3 @@ typedef Vector4T<double> Vector4d;
 typedef Vector4T<int32_t> Vector4i;
 
 F_END_NAMESPACE
-
-#endif // _ESP_CORE_VECTOR4T_H

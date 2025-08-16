@@ -1,11 +1,10 @@
 /**
  * BitMatrix - Dot Matrix Display Controller
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_MAX7219MATRIX_H
-#define _ESP_MATRIX_MAX7219MATRIX_H
+#pragma once
 
 #include "../library.h"
 #include "SerialDevice.h"
@@ -65,5 +64,3 @@ private:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_MATRIX_MAX7219MATRIX_H

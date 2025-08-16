@@ -3,7 +3,3 @@
  * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
-
-#pragma once
-
-#include "common.h"

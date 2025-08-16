@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_CORE_APPLICATION_H
-#define _ESP_CORE_APPLICATION_H
+#pragma once
 
 #include "../library.h"
 #include "Environment.h"
@@ -32,5 +31,3 @@ protected:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_CORE_APPLICATION_H

@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Matrix Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_MAX7219CHAIN_H
-#define _ESP_MATRIX_MAX7219CHAIN_H
+#pragma once
 
 #include "../library.h"
 #include "SerialChain.h"
@@ -35,5 +34,3 @@ public:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_MATRIX_MAX7219CHAIN_H

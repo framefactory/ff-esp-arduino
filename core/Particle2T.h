@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_CORE_PARTICLE2T_H
-#define _ESP_CORE_PARTICLE2T_H
+#pragma once
 
 #include "../library.h"
 #include "Vector2T.h"
@@ -65,5 +64,3 @@ typedef Particle2T<float> Particle2f;
 typedef Particle2T<double> Particle2d;
 
 F_END_NAMESPACE
-
-#endif // _ESP_CORE_PARTICLE2T_H

@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2021 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_CORE_MATH_H
-#define _ESP_CORE_MATH_H
+#pragma once
 
 #include "../library.h"
 #include <math.h>
@@ -83,5 +82,3 @@ public:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_CORE_MATH_H

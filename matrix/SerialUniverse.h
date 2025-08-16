@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Matrix Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_MATRIX_SERIALUNIVERSE_H
-#define _ESP_MATRIX_SERIALUNIVERSE_H
+#pragma once
 
 #include "../library.h"
 #include <vector>
@@ -53,5 +52,3 @@ private:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_MATRIX_SERIALUNIVERSE_H

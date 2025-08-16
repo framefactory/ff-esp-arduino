@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2021 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_NATIVE_CORE_TASK_H
-#define _ESP_NATIVE_CORE_TASK_H
+#pragma once
 
 #include "../library.h"
 
@@ -74,5 +73,3 @@ private:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_NATIVE_CORE_TASK_H

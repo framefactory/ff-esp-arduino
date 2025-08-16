@@ -6,4 +6,12 @@
 
 #pragma once
 
-#include "common.h"
+#include "../library.h"
+
+F_BEGIN_NAMESPACE
+
+class System
+{
+};
+
+F_END_NAMESPACE

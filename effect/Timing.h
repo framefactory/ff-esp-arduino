@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Effect Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_EFFECT_TIMING_H
-#define _ESP_EFFECT_TIMING_H
+#pragma once
 
 #include "../library.h"
 
@@ -41,5 +40,3 @@ private:
 };
 
 F_END_NAMESPACE
-
-#endif // _ESP_EFFECT_TIMING_H

@@ -1,11 +1,10 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2023 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
-#ifndef _ESP_CORE_COMMON_H
-#define _ESP_CORE_COMMON_H
+#pragma once
 
 #include <cstdint>
 #include <Arduino.h>
@@ -18,5 +17,3 @@
 #define F_SAFE_DELETE(p) if (p) { delete (p); (p) = nullptr; }
 
 #define F_DISABLE_COPY(Class) private: Class(const Class& other); Class& operator=(const Class& other);
-
-#endif // _ESP_CORE_COMMON_H

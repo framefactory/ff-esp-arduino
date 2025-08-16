@@ -1,6 +1,6 @@
 /**
  * ESP/Arduino Core Library
- * Copyright 2021 Frame Factory GmbH, Ralph Wiedemeier
+ * Copyright 2025 Frame Factory GmbH, Ralph Wiedemeier
  * License: MIT
  */
 
