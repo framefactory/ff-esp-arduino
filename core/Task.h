@@ -31,8 +31,16 @@ public:
     /// Delays the calling task by the given number of milliseconds.
     static void delay(uint32_t milliseconds);
     /// Returns the number of tasks the kernel is currently managing.
-    static uint32_t count();
-    
+    static uint32_t totalTaskCount();
+    /// Returns the handle of the currently running task.
+    static TaskHandle_t getCurrentTaskHandle();
+    /// Returns the core on which the task is running.
+    static core_t getTaskCore(TaskHandle_t taskHandle);
+    /// Returns the name of the task associated with the given handle.
+    static const char* getTaskName(TaskHandle_t taskHandle);
+    /// Prints info about the current task to the serial console.
+    static void printCurrentTaskInfo();
+
     /// Creates and runs a new task.
     Task(const char* pName = "", core_t core = CORE_ANY, uint32_t priority = tskIDLE_PRIORITY, uint32_t stackSize = 16384);
     /// Virtual destructor. Stops and deletes the task.

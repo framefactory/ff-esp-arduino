@@ -23,9 +23,34 @@ void Task::delay(uint32_t milliseconds)
     vTaskDelay(milliseconds / portTICK_PERIOD_MS);
 }
 
-uint32_t Task::count()
+uint32_t Task::totalTaskCount()
 {
     return uxTaskGetNumberOfTasks();
+}
+
+TaskHandle_t Task::getCurrentTaskHandle()
+{
+    return xTaskGetCurrentTaskHandle();
+}
+
+Task::core_t Task::getTaskCore(TaskHandle_t taskHandle)
+{
+    BaseType_t core = xTaskGetAffinity(taskHandle);
+    return core < 0 || core > 1 ? CORE_ANY : static_cast<core_t>(core);
+}
+
+const char* Task::getTaskName(TaskHandle_t taskHandle)
+{
+    return pcTaskGetTaskName(taskHandle);
+}
+
+void Task::printCurrentTaskInfo()
+{
+    TaskHandle_t currentTask = getCurrentTaskHandle();
+    Serial.printf("Current Task: %s, Core: %d, Priority: %d\n",
+                  getTaskName(currentTask),
+                  getTaskCore(currentTask),
+                  uxTaskPriorityGet(currentTask));
 }
 
 Task::Task(const char* pName, core_t core, uint32_t priority, uint32_t stackSize)

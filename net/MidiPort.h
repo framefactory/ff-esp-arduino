@@ -22,21 +22,25 @@ public:
     MidiPort();
     virtual ~MidiPort() {}
 
+    /// To be called in the main loop. Delivers all messages in the queue to the listener.
     void dispatch();
+    /// Sets the listener for MIDI messages, implementing the MidiListener interface.
     void setListener(MidiListener* pListener);
 
+    /// Returns the number of messages in the queue.
     size_t count() const { return _messageQueue.size(); }
+    /// Returns true if there are no messages in the queue.
     bool empty() const { return _messageQueue.empty(); }
 
 protected:
     void dispatchMessage(const MidiMessage& message);
-    void enqueueMessage(const MidiMessage& message);
-    
     void dispatchSysEx(const std::string& sysEx);
+
+    void enqueueMessage(const MidiMessage& message);
     void enqueueSysEx(const std::string& sysEx);
 
 private:
-    MidiListener* _pListener;
+    MidiListener* _pListener = nullptr;
 
     typedef std::queue<MidiMessage> messageQueue_t;
     messageQueue_t _messageQueue;

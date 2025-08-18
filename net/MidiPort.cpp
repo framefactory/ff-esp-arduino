@@ -10,7 +10,6 @@
 F_USE_NAMESPACE
 
 MidiPort::MidiPort() :
-    _pListener(nullptr),
     _mutex(xSemaphoreCreateMutex())
 {
 }
@@ -95,6 +94,13 @@ void MidiPort::dispatchMessage(const MidiMessage& message)
     }
 }
 
+void MidiPort::dispatchSysEx(const std::string& sysEx)
+{
+    if (_pListener) {
+        _pListener->onSysEx(sysEx);
+    }
+}
+
 void MidiPort::enqueueMessage(const MidiMessage& message)
 {
     xSemaphoreTake(_mutex, portMAX_DELAY);
@@ -106,13 +112,6 @@ void MidiPort::enqueueMessage(const MidiMessage& message)
     _messageQueue.emplace(message);
 
     xSemaphoreGive(_mutex);
-}
-
-void MidiPort::dispatchSysEx(const std::string& sysEx)
-{
-    if (_pListener) {
-        _pListener->onSysEx(sysEx);
-    }
 }
 
 void MidiPort::enqueueSysEx(const std::string& sysEx)
