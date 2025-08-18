@@ -6,8 +6,10 @@
 
 #include "BLEMidi.h"
 
+
 F_USE_NAMESPACE
-/*
+
+
 BLEMidi::BLEMidi(const std::string& deviceName) :
     _deviceName(deviceName)
 {
@@ -15,7 +17,7 @@ BLEMidi::BLEMidi(const std::string& deviceName) :
 
 void BLEMidi::begin()
 {
-    Serial.println("Initializing ESP32 MIDI");
+    Serial.println("[BLEMidi] initializing...");
     BLEDevice::init(_deviceName);
 
     BLEServer* pServer = BLEDevice::createServer();
@@ -43,6 +45,8 @@ void BLEMidi::begin()
     BLEAdvertising *pAdvertising = pServer->getAdvertising();
     pAdvertising->addServiceUUID(pService->getUUID());
     pAdvertising->start();
+
+    Serial.println("[BLEMidi] BLE advertising started.");
 }
 
 void BLEMidi::onConnect(BLEServer* pServer)
@@ -146,4 +150,3 @@ void BLEMidi::onStatus(BLECharacteristic* pCharacteristic, BLECharacteristicCall
 {
     Serial.println("[BLEMidi] onStatus");
 }
-*/

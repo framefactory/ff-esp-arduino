@@ -11,13 +11,16 @@ F_USE_NAMESPACE
 
 AudioOut::AudioOut(int bckPin, int wsPin, int dataPin)
 {
-    _pinConfig.bck_io_num = bckPin;
-    _pinConfig.ws_io_num = wsPin;
-    _pinConfig.data_in_num = I2S_PIN_NO_CHANGE;
-    _pinConfig.data_out_num = dataPin;
+    _pinConfig = {
+        .mck_io_num = I2S_PIN_NO_CHANGE,
+        .bck_io_num = bckPin,
+        .ws_io_num = wsPin,
+        .data_out_num = dataPin,
+        .data_in_num = I2S_PIN_NO_CHANGE
+    };
 }
 
-bool AudioOut::open()
+bool AudioOut::open(uint32_t sampleRate /* = 44100 */, int dmaBufCount /* = 8 */, int dmaBufLen /* = 128 */)
 {
     if (_isOpen) {
         return true;
@@ -30,9 +33,9 @@ bool AudioOut::open()
         .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
         .communication_format = I2S_COMM_FORMAT_STAND_I2S,
         .intr_alloc_flags = 0,
-        .dma_buf_count = 8,
-        .dma_buf_len = 64,
-        .use_apll = true,
+        .dma_buf_count = dmaBufCount,
+        .dma_buf_len = dmaBufLen,
+        .use_apll = false,
         .tx_desc_auto_clear = true,
         .fixed_mclk = 0
     };
@@ -40,11 +43,14 @@ bool AudioOut::open()
     esp_err_t result = i2s_driver_install(_port, &config, 0, NULL);
 
     if (result == ESP_OK) {
-        i2s_set_pin(_port, &_pinConfig);
+        result = i2s_set_pin(_port, &_pinConfig);
+    }
+
+    if (result == ESP_OK) {
         _isOpen = true;
     }
     else {
-        Serial.println("[AudioOut] failed to install I2S driver");
+        Serial.printf("[AudioOut] I2S driver initialization failed: %s\n", esp_err_to_name(result));
         _isOpen = false;
     }
 

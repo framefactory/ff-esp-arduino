@@ -17,7 +17,7 @@ public:
     AudioOut(int bckPin, int wsPin, int dataPin);
     virtual ~AudioOut() { }
 
-    bool open();
+    bool open(uint32_t sampleRate = 44100, int dmaBufCount = 8, int dmaBufLen = 128);
     void close();
 
     bool write(const int16_t* pData, size_t length);

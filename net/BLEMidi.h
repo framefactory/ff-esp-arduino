@@ -9,7 +9,6 @@
 #include "../library.h"
 #include "MidiPort.h"
 
-/*
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -47,4 +46,3 @@ private:
 };
 
 F_END_NAMESPACE
-*/
